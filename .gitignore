@@ -53,3 +53,36 @@ dkms.conf
 
 # debug information files
 *.dwo
+
+# CLion / JetBrains
+.idea/
+cmake-build-*/
+.cmake/
+CMakeFiles/
+CMakeCache.txt
+Makefile
+compile_commands.json
+CTestTestfile.cmake
+Testing/
+
+# Binaires / objets
+*.o
+*.obj
+*.a
+*.lib
+*.dll
+*.so
+*.dylib
+*.exe
+
+# Sorties locales
+out/
+*.mmd
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Scripts perso / environnements (optionnel)
+scripts/*.local.sh
