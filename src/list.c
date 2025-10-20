@@ -23,3 +23,5 @@ void list_print(List l){
         l.head = l.head->next;
     }
 }
+
+//TODO : list_free
