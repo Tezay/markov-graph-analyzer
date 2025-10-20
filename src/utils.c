@@ -16,7 +16,7 @@
 
 // -----------------------------------------------------------------------------
 //                      Fonction : get_id_alpha
-// But de la fonction get_id_alpha : 1->"A", 26->"Z", 27->"AA", 28->"AB", ...
+// Rôle : 1->"A", 26->"Z", 27->"AA", 28->"AB", ...
 // Retourne un pointeur vers un buffer statique (réécrit à chaque appel).
 // -----------------------------------------------------------------------------
 
@@ -49,7 +49,7 @@ const char *get_id_alpha(int k) {
 
 // -----------------------------------------------------------------------------
 //                      Fonction : near_one
-// But de la fonction vérifier si on est proche de 1
+// Rôle : vérifier si on est proche de 1
 // retourne 1 si s ∈ [1-eps, 1+eps], sinon 0
 // -----------------------------------------------------------------------------
 
@@ -60,7 +60,7 @@ int near_one(float s, float eps) {
 
 // -----------------------------------------------------------------------------
 //                      Fonction : ensure_dir
-// But crée récursivement chaque composant d'un chemin de dossiers.
+// Rôle : crée récursivement chaque composant d'un chemin de dossiers.
 // Retourne 0 si OK, -1 en cas d'échec (errno est positionné).
 // Best-effort : si le dossier existe (EEXIST), on continue.
 // IMPORTANT : passer un chemin de dossier (ex: dirname(outfile)).
