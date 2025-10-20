@@ -86,3 +86,8 @@ Thumbs.db
 
 # Scripts perso / environnements (optionnel)
 scripts/*.local.sh
+
+#vscode
+.cache
+build
+
