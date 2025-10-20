@@ -22,6 +22,7 @@ set(SRC
         src/io.c
         src/mermaid.c
         src/utils.c
+        src/verify.c
 )
 
 add_executable(markov_graph_analyzer ${SRC})
