@@ -1,9 +1,14 @@
 #ifndef IO_H
 #define IO_H
+
 #include "graph.h"
 
-// Lecture d’un fichier et construction du graphe
-// Lève exit(EXIT_FAILURE) en cas d’erreur d’IO ou format.
+// Lit un fichier texte et construit le graphe 'out'.
+// Format attendu :
+//   N
+//   from to proba
+//   ...
+// En cas d'erreur IO/format, affiche un message et exit(EXIT_FAILURE).
 void read_graph_from_file(const char *filename, AdjList *out);
 
 #endif
