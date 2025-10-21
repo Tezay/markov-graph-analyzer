@@ -90,4 +90,4 @@ scripts/*.local.sh
 #vscode
 .cache
 build
-
+.vscode
