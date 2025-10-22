@@ -40,7 +40,7 @@ int main(int argc, char **argv) {
         } else {
             fprintf(stderr, "[ERR] Unknown or incomplete argument: %s\n", argv[i]);
             usage(argv[0]);
-            return 1;
+            return 1; // si erreur d'un argument
         }
     }
 
@@ -67,6 +67,6 @@ int main(int argc, char **argv) {
     // 4) Libération des ressources du graphe
     graph_free(&g);                               // libère toutes les listes et le tableau interne
 
-    // Code de retour : 0 si Markov OK, 2 si non-Markov (utile en CI/tests), 1 si erreur d’arguments.
+    // Code de retour : 0 si Markov OK, 2 si non-Markov (utile en CI/tests), 1 si erreur d’arguments (plus haut).
     return ok ? 0 : 2;
 }
