@@ -32,3 +32,5 @@ target_compile_definitions(markov_graph_analyzer PRIVATE
         DATA_DIR="${CMAKE_SOURCE_DIR}/data"
         OUT_DIR="${CMAKE_SOURCE_DIR}/out/mermaid"
 )
+
+add_subdirectory(test)
