@@ -14,6 +14,13 @@
 
 #include "utils.h"
 
+// src/utils.c
+#ifdef _WIN32
+  #include <direct.h>   // _mkdir
+  #ifndef mkdir
+    #define mkdir(path, mode) _mkdir(path)
+  #endif
+#endif
 // -----------------------------------------------------------------------------
 //                      Fonction : get_id_alpha
 // Rôle : 1->"A", 26->"Z", 27->"AA", 28->"AB", ...
