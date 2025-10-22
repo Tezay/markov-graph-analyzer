@@ -60,6 +60,6 @@ void graph_add_edge(AdjList *g, int from, int to, float proba) {
 void graph_print(const AdjList *g) {
     for (int i = 0; i < g->size; i++) {
         printf("Sommet %d: ", i + 1);
-        list_print(*&g->array[i]);
+        list_print(g->array[i]);
     }
 }

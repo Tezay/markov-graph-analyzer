@@ -7,7 +7,7 @@
 // * 
 // * @param l Pointeur vers la liste qui va être créer
 // */
-void list_inint(List *l) {
+void list_init(List *l) {
     l->head = NULL;
 }
 
