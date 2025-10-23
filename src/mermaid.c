@@ -72,10 +72,18 @@ int export_mermaid(const AdjList *g, const char *outfile) {
      // 2. Déclaration de toutes les arêtes (liaisons)
 
     for (int from = 1; from <= g->size; ++from) {
-        const char *from_id = get_id_alpha(from);       // Identifiant du nœud source
+        // Copier l'identifiant source dans un buffer local
+        char from_id[16];
+        strncpy(from_id, get_id_alpha(from), sizeof(from_id));
+        from_id[sizeof(from_id) - 1] = '\0';
+
         for (Cell *c = g->array[from - 1].head; c; c = c->next) { // Parcourt la liste des voisins
             int to = c->dest;                           // Nœud de destination
-            const char *to_id = get_id_alpha(to);       // Identifiant du nœud destination
+            // Copier l'identifiant destination dans un buffer local
+            char to_id[16];
+            strncpy(to_id, get_id_alpha(to), sizeof(to_id));
+            to_id[sizeof(to_id) - 1] = '\0';
+
             fprintf(f, "%s -->|%.2f| %s\n", from_id, (double)c->proba, to_id); // Écrit la connexion avec la probabilité
         }
     }
