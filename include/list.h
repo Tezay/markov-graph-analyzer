@@ -14,7 +14,7 @@ typedef struct {
 // API liste
 void  list_init(List *l);
 void  list_push_front(List *l, int dest, float proba);
-void  list_print(const List *l);
+void  list_print(List l);
 void  list_free(List *l);
 
 #endif
