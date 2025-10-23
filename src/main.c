@@ -22,7 +22,7 @@ static void usage(const char *prog) {
 
 int main(int argc, char **argv) {
     // Valeurs par défaut
-    const char *infile  = "data/exemple1.txt"; // fichier attendu : N puis 'from to proba'
+    const char *infile  = "data/exemple_valid_step3.txt"; // fichier attendu : N puis 'from to proba'
     const char *outfile = "out/graph.mmd";     // export Mermaid
     float eps = 0.01f;                          // tolérance de Markov
 
