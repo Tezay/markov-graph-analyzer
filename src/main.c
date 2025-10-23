@@ -22,8 +22,8 @@ static void usage(const char *prog) {
 
 int main(int argc, char **argv) {
     // Valeurs par défaut
-    const char *infile  = "data/exemple_valid_step3.txt"; // fichier attendu : N puis 'from to proba'
-    const char *outfile = "out/graph.mmd";     // export Mermaid
+    const char *infile  = DATA_DIR "/exemple_valid_step3.txt";   // fichier attendu : N puis 'from to proba'
+    const char *outfile = OUT_DIR "/graph.mmd";       // export Mermaid (dans le projet)
     float eps = 0.01f;                          // tolérance de Markov
 
     // Lecture et traitement des arguments de la ligne de commande

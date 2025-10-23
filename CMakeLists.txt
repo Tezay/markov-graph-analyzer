@@ -27,8 +27,8 @@ set(SRC
 
 add_executable(markov_graph_analyzer ${SRC})
 
-# Passer le chemin du dossier data en macro (utile dans main.c)
-target_compile_definitions(markov_graph_analyzer PRIVATE
+# Chemins indépendants du répertoire courant
+add_compile_definitions(
         DATA_DIR="${CMAKE_SOURCE_DIR}/data"
         OUT_DIR="${CMAKE_SOURCE_DIR}/out/mermaid"
 )
