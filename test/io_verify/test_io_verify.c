@@ -31,7 +31,7 @@ static int count_edges(const AdjList *g) {
     return m;
 }
 
-int run_test_io_verify(void) {
+int main(void) {
     DIR *dir = opendir(DATA_DIR);
     if (!dir) {
         perror("opendir(DATA_DIR)");
