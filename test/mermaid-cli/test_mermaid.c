@@ -1,6 +1,3 @@
-// test_mermaid.c
-// Mocks A/B + tests complets pour utils.c / mermaid.c + test du main.c (via -DTEST_NO_MAIN)
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -18,29 +15,6 @@
 /* Helpers de gestion de graphe (mocks internes)                              */
 /* ─────────────────────────────────────────────────────────────────────────── */
 
-// test/test_mermaid.c
-
-void graph_init(AdjList *g, int n) {
-    g->size = n;
-    g->array = (List*)calloc((size_t)n, sizeof(List));
-    if (!g->array) {
-        perror("calloc(List*)");
-        exit(EXIT_FAILURE);
-    }
-}
-
-void graph_add_edge(AdjList *g, int from, int to, float proba) {
-    if (from < 1 || from > g->size || to < 1 || to > g->size) {
-        fprintf(stderr, "[graph_add_edge] out of bounds: %d -> %d (size=%d)\n", from, to, g->size);
-        exit(EXIT_FAILURE);
-    }
-    Cell *c = (Cell*)malloc(sizeof(Cell));
-    if (!c) { perror("malloc(Cell)"); exit(EXIT_FAILURE); }
-    c->dest  = to;
-    c->proba = proba;
-    c->next  = g->array[from - 1].head;
-    g->array[from - 1].head = c;
-}
 
 static void print_adjlist(const AdjList *g, const char *title) {
     if (title) printf("=== %s ===\n", title);
@@ -56,21 +30,6 @@ static void print_adjlist(const AdjList *g, const char *title) {
 /* ─────────────────────────────────────────────────────────────────────────── */
 /* Fonctions attendues par main.c / mermaid.c (mocks A/B)                     */
 /* ─────────────────────────────────────────────────────────────────────────── */
-
-void graph_free(AdjList *g) {
-    if (!g || !g->array) return;
-    for (int i = 0; i < g->size; ++i) {
-        Cell *cur = g->array[i].head;
-        while (cur) {
-            Cell *n = cur->next;
-            free(cur);
-            cur = n;
-        }
-    }
-    free(g->array);
-    g->array = NULL;
-    g->size = 0;
-}
 
 int verify_markov(const AdjList *g, float eps) {
     if (!g) return 0;
@@ -282,7 +241,6 @@ static void test_read_graph_from_file_and_export(void) {
 /* ─────────────────────────────────────────────────────────────────────────── */
 #ifndef TEST_NO_MAIN
 int main(void) {
-    printf("===== TESTS Personne C (utils.c / mermaid.c) + mocks A/B =====\n");
 
     test_get_id_alpha();
     test_near_one();
@@ -292,7 +250,6 @@ int main(void) {
     test_read_graph_from_file_and_export();
 
     printf("\nTous les tests ont été exécutés.\n");
-    printf("Vous pouvez maintenant tester main.c avec la cible markov_mocks si configurée.\n");
     return 0;
 }
 #endif
