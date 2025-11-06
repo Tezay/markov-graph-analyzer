@@ -14,6 +14,8 @@
 
 #include "utils.h"
 
+//fonction utils parti 1
+
 // src/utils.c
 #ifdef _WIN32
   #include <direct.h>   // _mkdir
