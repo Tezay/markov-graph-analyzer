@@ -108,21 +108,21 @@ Construire markov-graph-analyzer depuis les sources et installer les dépendance
 
 #### 1. **Cloner le dépôt :**
 
-    ```sh
-    git clone https://github.com/Tezay/markov-graph-analyzer
-    ```
+  ```
+  git clone https://github.com/Tezay/markov-graph-analyzer
+  ```
 
 #### 2. **Aller dans le répertoire du projet :**
 
-    ```sh
-    cd markov-graph-analyzer
-    ```
+  ```
+  cd markov-graph-analyzer
+  ```
 
 #### 3. **Compiler :**
 
 **Avec [CMake](https://isocpp.org/):**
 
-```sh
+```
 cmake . && make
 ```
 
@@ -132,7 +132,7 @@ Exécuter le projet :
 
 **Avec [CMake](https://isocpp.org/):**
 
-```sh
+```
 ./markov-graph-analyzer
 ```
 
