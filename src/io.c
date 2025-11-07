@@ -4,7 +4,19 @@
 #include <ctype.h>
 #include "io.h"
 
-// Supprime les espaces blancs de fin de chaîne
+/**
+ * @brief  Supprime les espaces blancs en fin de chaîne (trim droit)
+ *
+ * Coupe la chaîne en place en remplaçant, à partir de la fin, les
+ * caractères dont le code ASCII est inférieur ou égal à ' ' par un
+ * '\0'. Si `s` vaut NULL, la fonction ne fait rien.
+ *
+ * @param[in,out] s  Chaîne C modifiée en place (peut être NULL)
+ *
+ * @return  void
+ *
+ * @warning Le pointeur doit référencer une zone mémoire modifiable.
+ */
 static void rtrim(char *s) {
     if (!s) return;
     size_t n = strlen(s);
@@ -13,7 +25,19 @@ static void rtrim(char *s) {
     }
 }
 
-// Retourne 1 si la ligne est vide ou un commentaire, 0 sinon
+/**
+ * @brief  Indique si une ligne est vide ou un commentaire
+ *
+ * Ignore les espaces en tête. Considère comme commentaire/ligne vide
+ * toute ligne vide, toute ligne commençant par '#', ou par '//' (après
+ * retrait des espaces de tête).
+ *
+ * @param[in] s  Pointeur sur la ligne C terminée par '\0'
+ *
+ * @return  1 si la ligne est vide/commentaire, 0 sinon
+ *
+ * @pre     `s` doit être non NULL.
+ */
 static int is_comment_or_blank(const char *s) {
     // ignore lignes vides, commentaires # ou //
     while (*s && isspace((unsigned char)*s)) ++s;
@@ -23,7 +47,30 @@ static int is_comment_or_blank(const char *s) {
     return 0;
 }
 
-// Lit un graphe depuis un fichier texte et le stocke dans 'out'
+/**
+ * @brief  Lit un graphe depuis un fichier texte et le stocke dans `out`
+ *
+ * Le format attendu est:
+ *   - une première ligne utile contenant `N` (nombre de sommets), après
+ *     éventuels commentaires/espaces;
+ *   - des lignes de la forme: `from to proba`, potentiellement entrecoupées
+ *     de lignes vides ou de commentaires ("#" ou "//"). Les probabilités
+ *     doivent être dans [0, 1] et les sommets dans [1, N]. Les lignes
+ *     invalides sont signalées et ignorées.
+ *
+ * La fonction initialise `out` via `graph_init(out, N)` et ajoute les arêtes
+ * valides avec `graph_add_edge`. En cas d'erreur d'ouverture du fichier ou
+ * de `N` invalide, la fonction affiche un message et termine le programme
+ * avec `exit(EXIT_FAILURE)`.
+ *
+ * @param[in]  filename  Chemin du fichier d'entrée (texte)
+ * @param[out] out       Graphe de sortie initialisé et rempli
+ *
+ * @return  void
+ *
+ * @pre     `filename` et `out` doivent être non NULL.
+ * @see     graph_init, graph_add_edge
+ */
 void read_graph_from_file(const char *filename, AdjList *out) {
     // Ouverture du fichier en lecture texte
     FILE *f = fopen(filename, "rt");

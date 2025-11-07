@@ -1,11 +1,44 @@
 #include <stdio.h>
 #include "verify.h"
 
-// Vérifie si x ∈ [a, b]
+/**
+ * @brief  Teste si une valeur appartient à [a, b] (inclus)
+ *
+ * Compare `x` à l'intervalle fermé [a, b] et renvoie 1 si `a <= x <= b`,
+ * sinon 0.
+ *
+ * @param[in] x  Valeur testée
+ * @param[in] a  Borne inférieure de l'intervalle
+ * @param[in] b  Borne supérieure de l'intervalle
+ *
+ * @return  1 si x ∈ [a, b], 0 sinon
+ *
+ * @pre     On suppose `a <= b`.
+ */
 static int in_range(float x, float a, float b) {
     return x >= a && x <= b;
 }
 
+/**
+ * @brief  Vérifie la propriété de chaîne de Markov du graphe
+ *
+ * Pour chaque sommet `i`, vérifie que la somme des probabilités des
+ * transitions sortantes est comprise dans [1 - eps, 1 + eps]. Vérifie
+ * également que chaque probabilité est dans [0, 1] et que chaque
+ * destination est un sommet valide de `g`.
+ *
+ * En cas d'incohérence, affiche des messages d'erreur explicites sur la
+ * sortie d'erreur standard. Si tout est correct, affiche un message de
+ * succès sur la sortie standard.
+ *
+ * @param[in] g    Pointeur vers le graphe d'adjacence (initialisé)
+ * @param[in] eps  Tolérance absolue (>= 0) pour la somme à 1
+ *
+ * @return  1 si toutes les vérifications passent, 0 sinon
+ *
+ * @pre     `g` doit être non NULL, `g->size > 0`, `g->array` non NULL.
+ * @see     AdjList, List, Cell
+ */
 int verify_markov(const AdjList *g, float eps) {
     if (!g || g->size <= 0 || !g->array) {
         fprintf(stderr, "[Markov][ERR] Graphe invalide (structure non initialisée).\n");
