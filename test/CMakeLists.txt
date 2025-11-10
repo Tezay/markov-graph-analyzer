@@ -5,8 +5,8 @@ include_directories(${PROJECT_SOURCE_DIR}/include)
 # Partie 1/3
 add_subdirectory(core)
 add_subdirectory(io_verify)
-add_subdirectory(mermaid-cli)
+add_subdirectory(mermaid_cli)
 
 # Partie 2/3
 add_subdirectory(tarjan_core)
-add_subdirectory(class_analysis_and_export)
+add_subdirectory(hasse_links)

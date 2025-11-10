@@ -1,8 +1,3 @@
-// ========================= utils.c =========================
-//  - get_id_alpha : convertir les chiffre en lettre exemple : 1->A, 26->Z, 27->AA, etc.
-//  - near_one     : vérifier si une somme est proche de 1
-//  - ensure_dir   : créer récursivement les dossiers d'un chemin pour éviter toute erreur lors de l'ouverture
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -23,12 +18,21 @@
     #define mkdir(path, mode) _mkdir(path)
   #endif
 #endif
-// -----------------------------------------------------------------------------
-//                      Fonction : get_id_alpha
-// Rôle : 1->"A", 26->"Z", 27->"AA", 28->"AB", ...
-// Retourne un pointeur vers un buffer statique (réécrit à chaque appel).
-// -----------------------------------------------------------------------------
 
+/**
+ * @brief  Convertit un entier positif en identifiant alphabétique (style Excel)
+ *
+ * Exemple : 1 → "A", 26 → "Z", 27 → "AA", 28 → "AB", etc.
+ * Le résultat est stocké dans un tampon statique réécrit à chaque appel.
+ *
+ * @param[in]  k  Entier positif à convertir (≥ 1)
+ *
+ * @return  Pointeur vers une chaîne statique contenant le résultat (réécrite à chaque appel)
+ *
+ * @note    L'appel renvoie "?" si `k <= 0`.
+ * @warning Le buffer retourné est partagé entre appels successifs — copier si nécessaire.
+ * @pre     `k` doit être strictement supérieur à 0.
+ */
 const char *get_id_alpha(int k) {
     static char buf[16];    // tampon de sortie statique partagé entre les appels
     char tmp[16];           // construit à l'envers puis inversé dans buf
@@ -56,25 +60,33 @@ const char *get_id_alpha(int k) {
     return buf;
 }
 
-// -----------------------------------------------------------------------------
-//                      Fonction : near_one
-// Rôle : vérifier si on est proche de 1
-// retourne 1 si s ∈ [1-eps, 1+eps], sinon 0
-// -----------------------------------------------------------------------------
-
+/**
+ * @brief  Vérifie si une valeur est proche de 1 dans une tolérance donnée
+ *
+ * Renvoie vrai (1) si `s` appartient à l’intervalle [1 - eps, 1 + eps],
+ * faux (0) sinon.
+ *
+ * @param[in]  s    Valeur à tester
+ * @param[in]  eps  Tolérance absolue (si négative, sa valeur absolue est utilisée)
+ *
+ * @return  1 si la valeur est proche de 1, sinon 0
+ */
 int near_one(float s, float eps) {
     if (eps < 0.0f) eps = -eps;        // tolère un eps négatif en entrée
     return fabsf(s - 1.0f) <= eps;     // distance à 1 inférieure au seuil ?
 }
 
-// -----------------------------------------------------------------------------
-//                      Fonction : ensure_dir
-// Rôle : crée récursivement chaque composant d'un chemin de dossiers.
-// Retourne 0 si OK, -1 en cas d'échec (errno est positionné).
-// Best-effort : si le dossier existe (EEXIST), on continue.
-// IMPORTANT : passer un chemin de dossier (ex: dirname(outfile)).
-// -----------------------------------------------------------------------------
-
+/**
+ * @brief  Crée récursivement chaque dossier d’un chemin donné
+ *
+ * Cette fonction s’assure que tous les répertoires parents d’un chemin existent,
+ * en les créant si nécessaire. Elle tolère l’existence préalable des dossiers.
+ *
+ * @param[in]  path  Chemin du dossier à créer (ex: "out" ou dirname(outfile))
+ *
+ * @return  0 si succès, -1 en cas d’échec (errno positionné)
+ *
+ */
 int ensure_dir(const char *path) {
     if (!path || !*path) {
         // Rien à faire : chaîne nulle ou vide => considérer OK
