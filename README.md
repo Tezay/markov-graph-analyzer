@@ -73,6 +73,9 @@ Ensemble d’outils pour analyser, valider et visualiser des graphes et chaînes
     │   ├── scc.h
     │   ├── tarjan.h
     │   ├── utils.h
+    │   ├── hasse.h
+    │   ├── markov_props.h
+    │   ├── mermaid_hasse.h
     │   └── verify.h
     ├── src
     │   ├── graph.c
@@ -83,6 +86,9 @@ Ensemble d’outils pour analyser, valider et visualiser des graphes et chaînes
     │   ├── scc.c
     │   ├── tarjan.c
     │   ├── utils.c
+    │   ├── hasse.c
+    │   ├── markov_props.c
+    │   ├── mermaid_hasse.c
     │   └── verify.c
     └── test
         ├── CMakeLists.txt
@@ -90,7 +96,9 @@ Ensemble d’outils pour analyser, valider et visualiser des graphes et chaînes
         ├── core
         ├── io_verify
         ├── mermaid_cli
-        └── tarjan_core
+        ├── tarjan_core
+        ├── hasse_links
+        └── class_analysis_and_export
 ```
 
 ---

@@ -1,6 +1,6 @@
 # Tests unitaires — markov-graph-analyzer
 
-Ce dossier contient des exécutables de test simples (sans CTest/GTest) pour vérifier chaque sous-partie du projet (jusqu'à **Partie 2.1**)
+Ce dossier contient des exécutables de test simples (sans CTest/GTest) pour vérifier chaque sous-partie du projet (jusqu'à **Partie 2.3**)
 
 ## Prérequis
 - CMake ≥ 3.16 et un compilateur C (GCC/Clang/MSVC)
@@ -13,6 +13,8 @@ Ce dossier contient des exécutables de test simples (sans CTest/GTest) pour vé
 - **Etape 3 :** `test/mermaid_cli` → cible `test_mermaid_cli` (utils + export Mermaid et vérifications basiques)
 ### Partie 2
 - **Etape 1 :** `test/tarjan_core` → cible `test_tarjan_core` (SCC via Tarjan, partition)
+- **Etape 2 :** `test/hasse_links` → cible `test_hasse_links` (liens inter-classes/Hasse)
+- **Etape 3 :** `test/class_analysis_and_export` → cible `test_class_analysis_and_export` (typage des classes, irréductibilité, absorbants, exports)
 
 Chaque sous-dossier possède son propre `CMakeLists.txt` qui déclare un exécutable `test_*` et fixe:
 - `RUNTIME_OUTPUT_DIRECTORY` = dossier de build (pour retrouver facilement les binaires)
@@ -20,7 +22,7 @@ Chaque sous-dossier possède son propre `CMakeLists.txt` qui déclare un exécut
 
 ## Exécuter via CLion
 1) Ouvrez la racine du projet dans CLion et laissez CMake s’indexer.
-2) Les cibles `test_core`, `test_io_verify`, `test_mermaid_cli`, `test_tarjan_core` apparaissent dans la liste des configurations.
+2) Les cibles `test_core`, `test_io_verify`, `test_mermaid_cli`, `test_tarjan_core`, `test_hasse_links`, `test_class_analysis_and_export` apparaissent dans la liste des configurations.
 3) Sélectionnez la cible souhaitée et lancez-la (Run ▶). Le répertoire de travail est défini à la racine du projet par CMake; si besoin, ajustez-le dans Run | Edit Configurations.
 
 ## Détails par test
@@ -52,8 +54,24 @@ Chaque sous-dossier possède son propre `CMakeLists.txt` qui déclare un exécut
 - Démarche: lit `data/exemple_valid_step3.txt`, exécute `tarjan_partition`, affiche les classes et construit un mapping sommet→classe pour vérification simple.
 - Résultat: affichage d’une partition plausible, fin de programme avec `[OK] Tarjan partition script executed.`
 
+### hasse_links (`test/hasse_links/test_hasse_links.c`)
+- But: construire et afficher les liens inter-classes (Hasse) à partir d’un graphe et de sa partition en CFC.
+- Démarche:
+  - construit un graphe d’exemple en mémoire
+  - calcule la partition via `tarjan_partition`
+  - appelle `build_class_links` pour produire les liens entre classes
+  - affiche la partition et les liens
+- Résultat: liste claire des classes et des arcs « Classe i -> Classe j » (aucun crash; liens cohérents avec le graphe).
+
+### class_analysis_and_export (`test/class_analysis_and_export/test_class_analysis_and_export.c`)
+- But: analyser les classes (transientes/persistantes, irréductibilité, états absorbants) et tester les exports Mermaid/texte.
+- Démarche:
+  - construit une partition de test déterministe et des liens Hasse
+  - appelle `markov_class_types`, `markov_is_irreducible`, `markov_is_absorbing_vertex`
+  - crée `out/` si besoin puis exporte avec `export_hasse_mermaid` et `export_partition_text`
+- Résultat: affichage des drapeaux transiente/persistante, du statut d’irréductibilité, du caractère absorbant de quelques sommets; création de `out/hasse_test.mmd` et `out/partition_test.txt` non vides.
+
 ## À propos des CMakeLists locaux
 - `test/CMakeLists.txt` ajoute chaque sous-répertoire et déclare un exécutable par test.
 - Chaque `CMakeLists.txt` de sous-dossier liste explicitement les sources du projet nécessaires (ex.: `src/graph.c`, `src/tarjan.c`, etc.).
 - Le projet racine définit `DATA_DIR` et `OUT_DIR` avant `add_subdirectory(test)`, ce qui rend ces macros visibles dans les sous-dossiers. Si vous déplacez `data/` ou `out/`, modifiez-les dans `CMakeLists.txt` à la racine.
-
