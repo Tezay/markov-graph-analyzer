@@ -9,3 +9,4 @@ add_subdirectory(mermaid-cli)
 
 # Partie 2/3
 add_subdirectory(tarjan_core)
+add_subdirectory(hasse_links)

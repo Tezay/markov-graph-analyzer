@@ -1,6 +1,6 @@
 # CMakeLists dedicated for mermaid-cli tests
 
-add_executable(test_mermaid_cli
+add_executable(test_mermaid-cli
         test_mermaid.c
         ${PROJECT_SOURCE_DIR}/src/graph.c
         ${PROJECT_SOURCE_DIR}/src/list.c
