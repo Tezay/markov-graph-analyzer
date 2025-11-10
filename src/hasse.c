@@ -1,3 +1,5 @@
+#include <stdlib.h>
+#include <stdio.h>
 #include "hasse.h"
 #include "graph.h"
 #include "scc.h"
