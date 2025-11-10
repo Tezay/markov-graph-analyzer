@@ -1,12 +1,16 @@
 #ifndef SCC_H
 #define SCC_H
 
+#include "graph.h"
+
+// Struct pour représenter une partition en composantes fortement connexes
 typedef struct {
     int *verts;      // ids des sommets (1..N)
     int  count;      // nombre d'éléments
     int  capacity;
 } SccClass;
 
+// Struct pour représenter une partition complète
 typedef struct {
     SccClass *classes;
     int       count;

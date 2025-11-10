@@ -10,7 +10,6 @@
 
 
 // Écrit dans un fichier l'en-tête YAML attendu par le format Mermaid pour configurer le style et la disposition du diagramme.
-
 static void write_mermaid_header(FILE *f) {
     fputs("---\n", f);
     fputs("config:\n", f);
@@ -20,12 +19,20 @@ static void write_mermaid_header(FILE *f) {
     fputs("---\n\n", f);
     fputs("flowchart LR\n", f);
 }
-// -----------------------------------------------------------------------------
-//                      Fonction : export_mermaid
-// Rôle : Exporte un graphe sous forme de fichier Mermaid (.mmd)
-// Retourne 0 si succès, -1 si erreur (avec message d'erreur sur stderr)
-// -----------------------------------------------------------------------------
 
+/**
+ * @brief  Exporte un graphe sous forme de fichier Mermaid (.mmd)
+ *
+ * Génère un fichier au format Mermaid contenant la représentation visuelle
+ * du graphe fourni. La fonction crée le répertoire de sortie si nécessaire,
+ * écrit l’en-tête de configuration Mermaid, puis les nœuds et arêtes du graphe.
+ *
+ * @param[in]  g        Pointeur vers la structure du graphe à exporter
+ * @param[in]  outfile  Chemin complet du fichier de sortie (ex. "out/graph.mmd")
+ *
+ * @return  0 en cas de succès, -1 en cas d’erreur (message sur stderr)
+ *
+ */
 int export_mermaid(const AdjList *g, const char *outfile) {
     // Vérifie la validité des arguments
     if (!g || !outfile) {
