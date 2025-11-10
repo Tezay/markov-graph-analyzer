@@ -5,6 +5,8 @@ add_executable(test_class_analysis_and_export
         ${PROJECT_SOURCE_DIR}/src/markov_props.c
         ${PROJECT_SOURCE_DIR}/src/mermaid_hasse.c
         ${PROJECT_SOURCE_DIR}/src/utils.c
+        ${PROJECT_SOURCE_DIR}/src/scc.c
+        ${PROJECT_SOURCE_DIR}/src/hasse.c
 )
 
 set_target_properties(test_class_analysis_and_export PROPERTIES
