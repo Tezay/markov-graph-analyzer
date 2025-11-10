@@ -5,6 +5,8 @@ add_executable(test_hasse_links
         ${PROJECT_SOURCE_DIR}/src/list.c
         ${PROJECT_SOURCE_DIR}/src/graph.c
         ${PROJECT_SOURCE_DIR}/src/hasse.c
+        ${PROJECT_SOURCE_DIR}/src/tarjan.c
+        ${PROJECT_SOURCE_DIR}/src/scc.c
 
 )
 
