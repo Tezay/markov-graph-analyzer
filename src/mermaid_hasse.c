@@ -10,11 +10,17 @@
 #include "utils.h"
 
 
-// -----------------------------------------------------------------------------
-//                      Fonction statique : write_mermaid_header_hasse
-// Rôle : Écrire un en-tête YAML Mermaid cohérent avec ton style Partie 1
-//        (layout, thème) + le type de diagramme (flowchart LR).
-// -----------------------------------------------------------------------------
+/**
+ * @brief  Écrit l'en-tête YAML Mermaid pour le diagramme Hasse
+ *
+ * Configure le layout, le thème et le type de diagramme (flowchart LR)
+ * pour rester cohérent avec le style de la Partie 1.
+ *
+ * @param[in]  f  Fichier déjà ouvert en écriture
+ *
+ * @return  void
+ *
+ */
 static void write_mermaid_header_hasse(FILE *f) {
     fputs("---\n", f);
     fputs("config:\n", f);
@@ -25,18 +31,17 @@ static void write_mermaid_header_hasse(FILE *f) {
     fputs("flowchart LR\n", f); // même style que export_mermaid (Partie 1)
 }
 
-// -----------------------------------------------------------------------------
-//                      Fonction statique : write_class_label
-// Rôle : Écrire une ligne Mermaid pour un nœud de classe Ck avec la liste des
-//        sommets entre accolades. Exemple :
-//
-//   C0["C0: {2,4,8,12}"]
-//
-// Entrées :
-//   - f         : fichier déjà ouvert en écriture
-//   - class_idx : index k de la classe (0..p->count-1)
-//   - cls       : pointeur vers la classe (SccClass)
-// -----------------------------------------------------------------------------
+/**
+ * @brief  Écrit un nœud Mermaid pour une classe Ck avec la liste des sommets
+ *
+ * Produit une ligne du type: Ck["Ck: {v1, v2, ...}"].
+ *
+ * @param[in]  f          Fichier déjà ouvert en écriture
+ * @param[in]  class_idx  Index k de la classe (0..p->count-1)
+ * @param[in]  cls        Pointeur vers la classe (SccClass)
+ *
+ * @return  void
+ */
 static void write_class_label(FILE *f, int class_idx, const SccClass *cls) {
     // Préfixe du nœud
     fprintf(f, "C%d[\"", class_idx);
@@ -56,16 +61,18 @@ static void write_class_label(FILE *f, int class_idx, const SccClass *cls) {
     fputs("}\"]\n", f);
 }
 
-// -----------------------------------------------------------------------------
-//                      Fonction statique : write_links
-// Rôle : Écrire toutes les arêtes Mermaid entre classes, au format :
-//
-//   Cfrom --> Cto
-//
-// Entrées :
-//   - f     : fichier déjà ouvert
-//   - links : tableau de liens entre classes
-// -----------------------------------------------------------------------------
+/**
+ * @brief  Écrit toutes les arêtes Mermaid entre classes
+ *
+ * Pour chaque lien (from_class, to_class), écrit une arête:
+ *   Cfrom --> Cto
+ *
+ * @param[in]  f      Fichier déjà ouvert en écriture
+ * @param[in]  links  Tableau des liens entre classes (HasseLinkArray)
+ *
+ * @return  void
+ *
+ */
 static void write_links(FILE *f, const HasseLinkArray *links) {
     if (!links || links->count <= 0) return;
 
@@ -77,22 +84,19 @@ static void write_links(FILE *f, const HasseLinkArray *links) {
     }
 }
 
-// -----------------------------------------------------------------------------
-//                      Fonction : export_hasse_mermaid
-// Rôle : Exporter le graphe des classes (Partition + HasseLinkArray) au format
-//        Mermaid (.mmd). Chaque classe devient un nœud "Ck", avec la liste de
-//        ses sommets affichée dans le label. Les liens entre classes deviennent
-//        des flèches.
-//
-// Entrées :
-//   - p       : Partition (liste des classes SCC)
-//   - links   : Liens entre classes (cf. hasse.h)
-//   - outfile : chemin du .mmd de sortie (ex: "out/hasse.mmd")
-//
-// Retour :
-//   - 0 si succès
-//   - -1 si erreur (arguments, création dossier, ouverture fichier, etc.)
-// -----------------------------------------------------------------------------
+/**
+ * @brief  Exporte le graphe des classes (Partition + liens) au format Mermaid
+ *
+ * Chaque classe devient un nœud "Ck" dont le label affiche la liste de ses
+ * sommets. Les relations entre classes deviennent des flèches Mermaid.
+ *
+ * @param[in]  p        Partition (liste des classes SCC)
+ * @param[in]  links    Liens entre classes (voir hasse.h)
+ * @param[in]  outfile  Chemin du .mmd de sortie (ex: "out/hasse.mmd")
+ *
+ * @return  0 si succès, -1 en cas d’erreur (arguments, répertoire, ouverture)
+ *
+ */
 int export_hasse_mermaid(const Partition *p, const HasseLinkArray *links, const char *outfile) {
     // 0) Vérification des arguments
     if (!p || !outfile) {
@@ -148,26 +152,19 @@ int export_hasse_mermaid(const Partition *p, const HasseLinkArray *links, const 
     return 0;
 }
 
-// -----------------------------------------------------------------------------
-//                      Fonction : export_partition_text
-// Rôle : Exporter la partition seule en texte brut (pratique pour debug).
-//
-// Format de sortie exemple :
-//
-//   # Partition (4 classes)
-//   Class 0: 2 4 8 12
-//   Class 1: 3
-//   Class 2: 7
-//   Class 3: 35
-//
-// Entrées :
-//   - p       : Partition (liste des classes SCC)
-//   - outfile : chemin du .txt de sortie
-//
-// Retour :
-//   - 0 si succès
-//   - -1 sinon
-// -----------------------------------------------------------------------------
+/**
+ * @brief  Exporte la partition seule en texte brut (utile pour le debug)
+ *
+ * Produit un fichier texte listant chaque classe et ses sommets :
+ *  - En-tête: "# Partition (N classes)"
+ *  - Puis une ligne par classe: "Class k: v1 v2 v3 ..."
+ *
+ * @param[in]  p        Partition (liste des classes SCC)
+ * @param[in]  outfile  Chemin du .txt de sortie
+ *
+ * @return  0 si succès, -1 sinon (arguments, répertoire, ouverture)
+ *
+ */
 int export_partition_text(const Partition *p, const char *outfile) {
     if (!p || !outfile) {
         fprintf(stderr, "[export_partition_text] invalid arguments (p/outfile)\n");

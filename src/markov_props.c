@@ -4,15 +4,17 @@
 #include "utils.h"
 
 
-// -----------------------------------------------------------------
-//           Fonction :  find_class_of_vertex
-//  Rôle : retrouver dans quelle classe (index) se trouve le sommet v
-//  Parcourt toutes les classes de la partition et cherche v dans
-//  chacun des tableaux verts[].
-//  Retour :
-//    - index de la classe (0..p->count-1) si trouvé
-//    - -1 si le sommet n'est dans aucune classe (cas d'erreur)
-// -----------------------------------------------------------------
+/**
+ * @brief  Trouve l'index de la classe contenant un sommet donné
+ *
+ * Parcourt toutes les classes de la partition et recherche `vertex`
+ * dans chacun des tableaux `verts[]`.
+ *
+ * @param[in]  part    Partition de SCC (peut être NULL)
+ * @param[in]  vertex  Identifiant du sommet recherché
+ *
+ * @return  Index de la classe (0..part->count-1) si trouvé, sinon -1
+ */
 static int find_class_of_vertex(const Partition *part, int vertex) {
     if (!part) {
         return -1;
@@ -30,14 +32,18 @@ static int find_class_of_vertex(const Partition *part, int vertex) {
     return -1;
 }
 
-// -----------------------------------------------------------------
-//  Fonction statique : class_has_outgoing_link
-//  Rôle : dire si une classe donnée possède AU MOINS UN lien sortant
-//         vers une AUTRE classe (to != from).
-//  Retour :
-//    - 1 si la classe a au moins un lien sortant
-//    - 0 sinon
-// -----------------------------------------------------------------
+/**
+ * @brief  Indique si une classe possède au moins un lien sortant vers une autre classe
+ *
+ * Vérifie l'existence d'au moins un lien `from_class == class_idx` avec
+ * `to_class != class_idx`.
+ *
+ * @param[in]  links      Tableau des liens du Hasse
+ * @param[in]  class_idx  Index de la classe à tester
+ *
+ * @return  1 si au moins un lien sortant existe, sinon 0
+ *
+ */
 static int class_has_outgoing_link(const HasseLinkArray *links, int class_idx) {
     if (!links) {
         return 0; //Pas de structure
@@ -52,16 +58,24 @@ static int class_has_outgoing_link(const HasseLinkArray *links, int class_idx) {
     return 0;
 }
 
-
-
-// -----------------------------------------------------------------
-//               Fonction : markov_class_types
-//  Rôle : remplir deux tableaux 0/1 indiquant pour chaque classe si
-//         elle est transitoire ou persistante.
-//  Convention utilisée :
-//    - transitoire = 1 si la classe a AU MOINS un lien sortant
-//    - persistante = 1 si la classe N'A AUCUN lien sortant.
-// -----------------------------------------------------------------
+/**
+ * @brief  Étiquette chaque classe comme transitoire ou persistante
+ *
+ * Remplit deux tableaux binaires (0/1) indiquant, pour chaque classe,
+ * si elle est transitoire ou persistante.
+ *
+ * Convention :
+ * - transitoire = 1 si la classe a AU MOINS un lien sortant,
+ * - persistante = 1 si la classe N'A AUCUN lien sortant.
+ *
+ * @param[in]   links          Tableau des liens entre classes (peut être NULL)
+ * @param[in]   nb_classes     Nombre total de classes
+ * @param[out]  is_transient   Tableau (taille nb_classes) rempli à 1 si transitoire, 0 sinon (si non NULL)
+ * @param[out]  is_persistent  Tableau (taille nb_classes) rempli à 1 si persistante, 0 sinon (si non NULL)
+ *
+ * @return  void
+ *
+ */
 void markov_class_types(const HasseLinkArray *links, int nb_classes,
                         int *is_transient, int *is_persistent)
 {
@@ -91,15 +105,16 @@ void markov_class_types(const HasseLinkArray *links, int nb_classes,
     }
 }
 
-// -----------------------------------------------------------------
-//              Fonction : markov_is_irreducible
-//  Rôle : dire si le graphe est irréductible.
-//         Avec la partition en SCC, c'est très simple :
-//         s'il n'y a qu'une seule classe, le graphe est irréductible.
-//  Retour :
-//    - 1 si p->count == 1
-//    - 0 sinon
-// -----------------------------------------------------------------
+/**
+ * @brief  Indique si le graphe est irréductible
+ *
+ * Avec la partition en composantes fortement connexes (SCC), le graphe
+ * est irréductible s'il n'existe qu'une seule classe.
+ *
+ * @param[in]  part  Partition en SCC
+ *
+ * @return  1 si `part->count == 1`, sinon 0
+ */
 int markov_is_irreducible(const Partition *part) {
   //On vérifie si il y a une partition
     if (!part) {
@@ -109,17 +124,21 @@ int markov_is_irreducible(const Partition *part) {
     return (part->count == 1) ? 1 : 0;
 }
 
-// -----------------------------------------------------------------
-//              Fonction : markov_is_absorbing_vertex
-//  Rôle : dire si un sommet v est ABSORBANT.
-//  Donc on vérifie :
-//    1. retrouver la classe de v
-//    2. vérifier que cette classe a exactement 1 élément
-//    3. vérifier que cette classe N'A PAS de lien sortant
-//  Retour :
-//    - 1 si v est absorbant
-//    - 0 sinon
-// -----------------------------------------------------------------
+/**
+ * @brief  Teste si un sommet est absorbant
+ *
+ * Un sommet `v` est absorbant si :
+ *  1) la classe contenant `v` existe,
+ *  2) cette classe a exactement 1 sommet,
+ *  3) cette classe n'a aucun lien sortant vers une autre classe.
+ *
+ * @param[in]  part   Partition en SCC
+ * @param[in]  links  Tableau des liens du Hasse
+ * @param[in]  vertex Sommet à tester
+ *
+ * @return  1 si `vertex` est absorbant, sinon 0
+ *
+ */
 int markov_is_absorbing_vertex(const Partition *part, const HasseLinkArray *links, int vertex) {
   //Vérification si la partition existe bien
     if (!part) {
