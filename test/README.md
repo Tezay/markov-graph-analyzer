@@ -1,6 +1,6 @@
 # Tests unitaires — markov-graph-analyzer
 
-Ce dossier contient des exécutables de test simples (sans CTest/GTest) pour vérifier chaque sous-partie du projet (jusqu'à **Partie 2.3**)
+Ce dossier contient des exécutables de test simples (sans CTest/GTest) pour vérifier chaque sous-partie du projet (jusqu'à **Partie 3.1**)
 
 ## Prérequis
 - CMake ≥ 3.16 et un compilateur C (GCC/Clang/MSVC)
@@ -15,6 +15,9 @@ Ce dossier contient des exécutables de test simples (sans CTest/GTest) pour vé
 - **Etape 1 :** `test/tarjan_core` → cible `test_tarjan_core` (SCC via Tarjan, partition)
 - **Etape 2 :** `test/hasse_links` → cible `test_hasse_links` (liens inter-classes/Hasse)
 - **Etape 3 :** `test/class_analysis_and_export` → cible `test_class_analysis_and_export` (typage des classes, irréductibilité, absorbants, exports)
+
+### Partie 3
+- **Etape 1 :** `test/matrix_ops` → cible `test_matrix_ops` (matrices de transition, puissances et distributions)
 
 Chaque sous-dossier possède son propre `CMakeLists.txt` qui déclare un exécutable `test_*` et fixe:
 - `RUNTIME_OUTPUT_DIRECTORY` = dossier de build (pour retrouver facilement les binaires)
@@ -70,6 +73,16 @@ Chaque sous-dossier possède son propre `CMakeLists.txt` qui déclare un exécut
   - appelle `markov_class_types`, `markov_is_irreducible`, `markov_is_absorbing_vertex`
   - crée `out/` si besoin puis exporte avec `export_hasse_mermaid` et `export_partition_text`
 - Résultat: affichage des drapeaux transiente/persistante, du statut d’irréductibilité, du caractère absorbant de quelques sommets; création de `out/hasse_test.mmd` et `out/partition_test.txt` non vides.
+
+### matrix_ops (`test/matrix_ops/test_matrix_ops.c`)
+- But: implémenter et valider les opérations matricielles (Partie 3.1) et les distributions \(\Pi_t = \Pi_0 M^t\).
+- Démarche:
+  - construit un petit graphe de météo en mémoire (Cloudy, Rainy, Sunny),
+  - génère la matrice de transition `M` via `mx_from_adjlist`,
+  - affiche `M`, `M^3` et `M^7` avec `mx_print`,
+  - calcule des distributions `Pi_t` en partant de Cloudy puis de Rainy avec `dist_power`,
+  - illustre un test de convergence via `mx_diff_abs1(M^k, M^{k+1}) < eps`.
+- Résultat: affichage lisible des matrices et distributions, valeurs numériques raisonnables (probabilités positives et sommes proches de 1), aucune erreur ni fuite apparente.
 
 ## À propos des CMakeLists locaux
 - `test/CMakeLists.txt` ajoute chaque sous-répertoire et déclare un exécutable par test.

@@ -11,3 +11,6 @@ add_subdirectory(mermaid_cli)
 add_subdirectory(tarjan_core)
 add_subdirectory(hasse_links)
 add_subdirectory(class_analysis_and_export)
+
+# Partie 3/3
+add_subdirectory(matrix_ops)

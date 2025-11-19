@@ -20,6 +20,7 @@ set(SRC
         src/list.c
         src/graph.c
         src/io.c
+        src/matrix.c
         src/mermaid.c
         src/utils.c
         src/verify.c
