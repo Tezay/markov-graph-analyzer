@@ -304,7 +304,7 @@ void mx_print(const t_matrix *M)
     }
 }
 
-//Part 3.3
+//Part 3.2
 
 /**
  * @brief Extrait la sous-matrice correspondant à une composante fortement connexe.
