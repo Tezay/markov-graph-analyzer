@@ -1,6 +1,7 @@
 #ifndef MATRIX_H
 #define MATRIX_H
 #include "graph.h"
+#include "scc.h"
 
 typedef struct {
     int n;          // taille n x n
@@ -17,5 +18,7 @@ void     mx_free(t_matrix *M);
 void dist_step(const float *pi0, const t_matrix *M, float *pi1);
 void dist_power(const float *pi0, const t_matrix *M, int t, float *pit);
 void mx_print(const t_matrix *M);
+
+t_matrix subMatrix(t_matrix matrix, Partition part, int compo_index);
 
 #endif

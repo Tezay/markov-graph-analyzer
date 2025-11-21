@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 
+#include "scc.h"
 #include "matrix.h"
 
 /**
@@ -303,3 +304,61 @@ void mx_print(const t_matrix *M)
     }
 }
 
+//Part 3.3
+
+/**
+ * @brief Extrait la sous-matrice correspondant à une composante fortement connexe.
+ *
+ * @param matrix      Matrice globale de transition (taille N x N).
+ * @param part        Partition du graphe en composantes fortement connexes.
+ * @param compo_index Indice de la composante dans part (0 .. part.count-1).
+ *
+ * @return t_matrix   Sous-matrice correspondant à la composante compo_index.
+ *                    Si compo_index est invalide ou la classe est vide :
+ *                    retourne une matrice de taille 0 (n = 0, a = NULL).
+ */
+t_matrix subMatrix(t_matrix matrix, Partition part, int compo_index)
+{
+    t_matrix sub;
+    sub.n = 0;
+    sub.a = NULL;
+
+    // Vérif de base sur l'indice de composante
+    if (compo_index < 0 || compo_index >= part.count) {
+        return sub;
+    }
+
+    // Récupération de la classe SCC correspondante
+    SccClass *cls = &part.classes[compo_index];
+    int m = cls->count;  // nombre de sommets dans la composante
+
+    if (m <= 0) {
+        // Classe vide -> sous-matrice vide
+        return sub;
+    }
+
+    // Création d'une matrice m x m initialisée à 0
+    sub = mx_zeros(m);
+
+    // Remplissage : projection des indices globaux vers la sous-matrice
+    //
+    // cls->verts[k] contient des ids de sommets 1..N
+    // Les indices de la matrice globale matrix.a sont 0..N-1
+    for (int i = 0; i < m; ++i) {
+        int gi = cls->verts[i] - 1;  // indice global (ligne)
+        if (gi < 0 || gi >= matrix.n) {
+            continue;
+        }
+
+        for (int j = 0; j < m; ++j) {
+            int gj = cls->verts[j] - 1;  // indice global (colonne)
+            if (gj < 0 || gj >= matrix.n) {
+                continue;
+            }
+
+            sub.a[i][j] = matrix.a[gi][gj];
+        }
+    }
+
+    return sub;
+}
