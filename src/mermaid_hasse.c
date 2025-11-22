@@ -43,11 +43,12 @@ static void write_mermaid_header_hasse(FILE *f) {
  * @return  void
  */
 static void write_class_label(FILE *f, int class_idx, const SccClass *cls) {
+    int cid = class_idx + 1; // affichage à partir de 1
     // Préfixe du nœud
-    fprintf(f, "C%d[\"", class_idx);
+    fprintf(f, "C%d[\"", cid);
 
     // Titre "Ck: {"
-    fprintf(f, "C%d: {", class_idx);
+    fprintf(f, "C%d: {", cid);
 
     // Liste des sommets : v1, v2, ..., vk
     for (int j = 0; j < cls->count; ++j) {
@@ -77,8 +78,8 @@ static void write_links(FILE *f, const HasseLinkArray *links) {
     if (!links || links->count <= 0) return;
 
     for (int i = 0; i < links->count; ++i) {
-        int from = links->links[i].from_class;
-        int to   = links->links[i].to_class;
+        int from = links->links[i].from_class + 1; // affichage à partir de 1
+        int to   = links->links[i].to_class + 1;
         // On écrit les liens tels quels ; si B retire la transitivité, on aura un Hasse net.
         fprintf(f, "C%d --> C%d\n", from, to);
     }
@@ -200,7 +201,7 @@ int export_partition_text(const Partition *p, const char *outfile) {
     // Pour chaque classe, lister ses sommets
     for (int k = 0; k < p->count; ++k) {
         const SccClass *cls = &p->classes[k];
-        fprintf(f, "Class %d:", k);
+        fprintf(f, "Class %d:", k + 1); // Affichage à partir de 1
         for (int j = 0; j < cls->count; ++j) {
             fprintf(f, " %d", cls->verts[j]);
         }

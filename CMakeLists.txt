@@ -27,6 +27,9 @@ set(SRC
         src/scc.c
         src/tarjan.c
         src/hasse.c
+        src/markov_props.c
+        src/mermaid_hasse.c
+        src/period.c
 )
 
 add_executable(markov_graph_analyzer ${SRC})

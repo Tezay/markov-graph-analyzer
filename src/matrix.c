@@ -362,3 +362,101 @@ t_matrix subMatrix(t_matrix matrix, Partition part, int compo_index)
 
     return sub;
 }
+
+/**
+ * @brief  Calcule M^k jusqu'à diff(M^k, M^(k-1)) < eps ou max_iter atteint.
+ *
+ * @param M Matrice globale de transition (taille N x N).
+ * @param eps Tolérance de convergence
+ * @param max_iter Nombre maximal d'itérations
+ * @param out Matrice résultat M^k
+ * @param iters_done Nombre d'itérations effectuées (optionnel, peut être NULL)
+ *
+ * @return 1 si convergence atteinte, 0 sinon, -1 en cas d'erreur
+ */
+int mx_power_until_diff(const t_matrix *M, float eps, int max_iter, t_matrix *out, int *iters_done)
+{
+    if (!M || !M->a || M->n <= 0 || !out || max_iter <= 0) {
+        return -1;
+    }
+    if (eps < 0.0f) eps = -eps;
+
+    t_matrix Mk = mx_zeros(M->n);
+    t_matrix Mk1 = mx_zeros(M->n);
+    mx_copy(M, &Mk); // M^1
+
+    int converged = 0;
+    int iter_used = 1;
+
+    for (int k = 1; k <= max_iter; ++k) {
+        mx_mul(&Mk, M, &Mk1);     // M^(k+1)
+        float diff = mx_diff_abs1(&Mk, &Mk1);
+        iter_used = k + 1; // puissance actuelle
+        mx_copy(&Mk1, &Mk); // préparation itération suivante
+
+        if (diff < eps) {
+            converged = 1;
+            break;
+        }
+    }
+
+    mx_copy(&Mk, out);
+    mx_free(&Mk);
+    mx_free(&Mk1);
+    if (iters_done) *iters_done = iter_used;
+    return converged;
+}
+
+// Norme L1 entre deux distributions de taille n
+static float dist_l1(const float *a, const float *b, int n) {
+    float s = 0.0f;
+    for (int i = 0; i < n; ++i) {
+        float d = a[i] - b[i];
+        if (d < 0) d = -d;
+        s += d;
+    }
+    return s;
+}
+
+/**
+ * @brief  Calcule la distribution stationnaire d'une matrice de transition
+ *
+ * @param MC  Matrice de transition de la classe persistante
+ * @param eps Tolérance de convergence
+ * @param max_iter Nombre maximal d'itérations
+ * @param pi_out Tableau de sortie pour la distribution stationnaire (taille MC->n)
+ *
+ * @return 1 si convergence atteinte, 0 sinon
+ */
+int stationary_distribution(const t_matrix *MC, float eps, int max_iter, float *pi_out)
+{
+    if (!MC || !MC->a || MC->n <= 0 || !pi_out || max_iter <= 0) {
+        return 0;
+    }
+    if (eps < 0.0f) eps = -eps;
+
+    int n = MC->n;
+    float *cur = (float *)malloc((size_t)n * sizeof(float));
+    float *next = (float *)malloc((size_t)n * sizeof(float));
+    if (!cur || !next) {
+        free(cur); free(next);
+        perror("malloc");
+        return 0;
+    }
+
+    // distribution initiale uniforme
+    for (int i = 0; i < n; ++i) cur[i] = 1.0f / (float)n;
+
+    int converged = 0;
+    for (int it = 0; it < max_iter; ++it) {
+        dist_step(cur, MC, next);
+        float d = dist_l1(cur, next, n);
+        for (int i = 0; i < n; ++i) cur[i] = next[i];
+        if (d < eps) { converged = 1; break; }
+    }
+
+    for (int i = 0; i < n; ++i) pi_out[i] = cur[i];
+    free(cur);
+    free(next);
+    return converged;
+}

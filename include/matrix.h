@@ -21,4 +21,7 @@ void mx_print(const t_matrix *M);
 
 t_matrix subMatrix(t_matrix matrix, Partition part, int compo_index);
 
+int mx_power_until_diff(const t_matrix *M, float eps, int max_iter, t_matrix *out, int *iters_done);
+int stationary_distribution(const t_matrix *MC, float eps, int max_iter, float *pi_out);
+
 #endif

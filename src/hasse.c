@@ -51,14 +51,18 @@ int hasse_link_exists(const HasseLinkArray *arr, int c_from, int c_to){
  * et la valeur est l'indice de sa classe (0-basé).
  */
 void build_vertex_to_class_map(Partition *p, int n_vertices, int *class_of_vertex){
+    if (!p || !class_of_vertex) return;
+    // initialiser à -1 pour détecter les sommets non affectés
+    for (int v = 0; v <= n_vertices; ++v) {
+        class_of_vertex[v] = -1;
+    }
     // Parcourt chaque classe (i est l'indice de la classe, 0-basé)
     for(int i =0; i<p->count;i++){
         SccClass v = p->classes[i]; // La classe actuelle
         
         // Parcourt chaque sommet 'k' dans cette classe
         for (int j = 0; j<v.count; j++) {
-            int k = v.verts[i]; // Erreur potentielle : devrait être v.verts[j] si 'j' est l'indice du sommet dans la classe 'v'.
-            // Correction supposée : int k = v.verts[j];
+            int k = v.verts[j];
             
             // Vérifie que l'indice du sommet est valide
             if (k >= 1 && k <= n_vertices) {
