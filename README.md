@@ -77,7 +77,6 @@ Ensemble d’outils pour analyser, valider et visualiser des graphes et chaînes
     │   ├── markov_props.h
     │   ├── mermaid_hasse.h
     │   ├── matrix.h
-    │   ├── matrix_sub.h
     │   ├── period.h
     │   └── verify.h
     ├── src

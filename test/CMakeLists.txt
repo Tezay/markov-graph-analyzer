@@ -14,5 +14,5 @@ add_subdirectory(class_analysis_and_export)
 
 # Partie 3/3
 add_subdirectory(matrix_ops)
-
+add_subdirectory(stationary_analysis)
 add_subdirectory(period_analysis)
