@@ -1,6 +1,6 @@
 # Tests unitaires — markov-graph-analyzer
 
-Ce dossier contient des exécutables de test simples (sans CTest/GTest) pour vérifier chaque sous-partie du projet (jusqu'à **Partie 3.1**)
+Ce dossier contient des exécutables de test simples (sans CTest/GTest) pour vérifier chaque sous-partie du projet (Parties 1 à 3 + défi période)
 
 ## Prérequis
 - CMake ≥ 3.16 et un compilateur C (GCC/Clang/MSVC)
@@ -15,9 +15,10 @@ Ce dossier contient des exécutables de test simples (sans CTest/GTest) pour vé
 - **Etape 1 :** `test/tarjan_core` → cible `test_tarjan_core` (SCC via Tarjan, partition)
 - **Etape 2 :** `test/hasse_links` → cible `test_hasse_links` (liens inter-classes/Hasse)
 - **Etape 3 :** `test/class_analysis_and_export` → cible `test_class_analysis_and_export` (typage des classes, irréductibilité, absorbants, exports)
-
 ### Partie 3
 - **Etape 1 :** `test/matrix_ops` → cible `test_matrix_ops` (matrices de transition, puissances et distributions)
+- **Etape 2 :** `test/stationary_analysis` → cible `test_stationary_analysis` (sous-matrices par classe et distributions stationnaires)
+- **Défi période :** `test/period_analysis` → cible `test_period` (période des classes et unicité stationnaire)
 
 Chaque sous-dossier possède son propre `CMakeLists.txt` qui déclare un exécutable `test_*` et fixe:
 - `RUNTIME_OUTPUT_DIRECTORY` = dossier de build (pour retrouver facilement les binaires)
@@ -25,7 +26,7 @@ Chaque sous-dossier possède son propre `CMakeLists.txt` qui déclare un exécut
 
 ## Exécuter via CLion
 1) Ouvrez la racine du projet dans CLion et laissez CMake s’indexer.
-2) Les cibles `test_core`, `test_io_verify`, `test_mermaid_cli`, `test_tarjan_core`, `test_hasse_links`, `test_class_analysis_and_export` apparaissent dans la liste des configurations.
+2) Les cibles `test_core`, `test_io_verify`, `test_mermaid_cli`, `test_tarjan_core`, `test_hasse_links`, `test_class_analysis_and_export`, `test_matrix_ops`, `test_stationary_analysis`, `test_period` apparaissent dans la liste des configurations.
 3) Sélectionnez la cible souhaitée et lancez-la (Run ▶). Le répertoire de travail est défini à la racine du projet par CMake; si besoin, ajustez-le dans Run | Edit Configurations.
 
 ## Détails par test
@@ -83,6 +84,16 @@ Chaque sous-dossier possède son propre `CMakeLists.txt` qui déclare un exécut
   - calcule des distributions `Pi_t` en partant de Cloudy puis de Rainy avec `dist_power`,
   - illustre un test de convergence via `mx_diff_abs1(M^k, M^{k+1}) < eps`.
 - Résultat: affichage lisible des matrices et distributions, valeurs numériques raisonnables (probabilités positives et sommes proches de 1), aucune erreur ni fuite apparente.
+
+### stationary_analysis (`test/stationary_analysis/test_stationary_analysis.c`)
+- But: vérifier l’extraction des sous-matrices par classe (Partie 3.2) et la cohérence des contenus.
+- Démarche: construit des partitions déterministes, extrait des sous-matrices, compare les valeurs attendues.
+- Résultat: sous-matrices correctes (tailles et coefficients), tests verts si l’extraction est valide.
+
+### period_analysis (`test/period_analysis/test_period.c`)
+- But: calculer la période d’une classe (défi Partie 3.3) et l’unicité de la stationnaire (période = 1).
+- Démarche: matrices simples (cycles de période 3, 1, 2), calcule `class_period` et `class_has_unique_stationary`.
+- Résultat: périodes détectées (3, 1, 2) et drapeau “stationnaire unique” cohérent.
 
 ## À propos des CMakeLists locaux
 - `test/CMakeLists.txt` ajoute chaque sous-répertoire et déclare un exécutable par test.

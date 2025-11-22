@@ -39,11 +39,12 @@
 
 Ensemble d’outils pour analyser, valider et visualiser des graphes et chaînes de Markov. Combine des algorithmes avec une visualisation intuitive pour aider développeurs et chercheurs à comprendre des structures complexes.
 
-- **🔍 Validation du graphe :** garantit l’intégrité probabiliste et la cohérence des chaînes de Markov.
-- **🌐 Export Mermaid :** génère des diagrammes clairs et stylés pour comprendre la structure des graphes.
-- **🧮 Composantes fortement connexes :** implémente l’algorithme de Tarjan pour la détection de cycles et la décomposition du graphe.
-- **🧩 Architecture modulaire :** favorise des tests et validations extensifs pour un développement fiable.
-- **📊 Analyse approfondie :** outils pour explorer classes de transition, structures cycliques et propriétés de graphe.
+- **🔍 Validation du graphe (Partie 1) :** vérifie les contraintes de Markov (sommes sortantes ≈ 1) à partir des fichiers texte.
+- **🌐 Export Mermaid (Partie 1) :** génère des diagrammes Mermaid du graphe brut.
+- **🧮 Composantes fortement connexes (Partie 2) :** algorithme de Tarjan + partition des classes.
+- **📈 Diagramme de Hasse (Partie 2) :** liens inter-classes avec option de suppression des redondances.
+- **📊 Propriétés Markov (Partie 2) :** classes transitoires/persistantes, états absorbants, irréductibilité.
+- **🧠 Matrices & distributions (Partie 3) :** puissances de matrices, convergence, distributions stationnaires par classe, périodicité (défi).
 
 ---
 
@@ -51,11 +52,11 @@ Ensemble d’outils pour analyser, valider et visualiser des graphes et chaînes
 
 |      | Composant       | Détails                                                                                     |
 | :--- | :-------------- | :------------------------------------------------------------------------------------------ |
-| ⚙️  | **Architecture**  | <ul><li>Conception modulaire séparant algorithmes cœur, I/O et utilitaires</li><li>Utilise CMake pour la configuration de build</li></ul> |
-| 📄 | **Documentation** | <ul><li>README de base avec vue d’ensemble</li><li>Contient la documentation des CMakeLists.txt</li></ul> |
-| 🧩 | **Tests**       | <ul><li>Sous-répertoires `test/` avec CMakeLists dédiés</li><li>Inclut des tests unitaires des algorithmes cœur (ex. algorithme de Tarjan)</li></ul> |
-| ⚡️  | **Performance**   | <ul><li>Algorithmes de graphe optimisés en C</li></ul> |
-| 📦 | **Dépendances**  | <ul><li>Dépendances externes minimales ; bibliothèques C standard principalement</li><li>Dépendances de build gérées via CMake</li></ul> |
+| ⚙️  | **Architecture**  | <ul><li>Modulaire (I/O, graphe, Tarjan, Hasse, matrices, périodes)</li><li>CMake pour orchestrer builds et tests</li></ul> |
+| 📄 | **Documentation** | <ul><li>Usage CLI simple (voir ci-dessous)</li><li>Tests listés dans `test/README.md`</li></ul> |
+| 🧩 | **Tests**       | <ul><li>Sous-répertoires `test/` par étape (Parties 1→3)</li><li>Inclut Tarjan, Hasse, matrices, stationnaires, période</li></ul> |
+| 🌐 | **Exports**       | <ul><li>Mermaid du graphe brut (Partie 1)</li><li>Mermaid du Hasse (Partie 2)</li></ul> |
+| 📊 | **Analyse**       | <ul><li>Classes transitoires/persistantes, absorbants, irréductibilité (Partie 2)</li><li>Convergence, stationnaires, période (Partie 3)</li></ul> |
 
 ---
 
@@ -65,6 +66,8 @@ Ensemble d’outils pour analyser, valider et visualiser des graphes et chaînes
 └── markov-graph-analyzer/
     ├── CMakeLists.txt
     ├── README.md
+    ├── data/
+    ├── out/
     ├── include
     │   ├── graph.h
     │   ├── io.h
@@ -96,13 +99,15 @@ Ensemble d’outils pour analyser, valider et visualiser des graphes et chaînes
     └── test
         ├── CMakeLists.txt
         ├── README.md
-        ├── core
-        ├── io_verify
-        ├── mermaid_cli
-        ├── tarjan_core
-        ├── hasse_links
-        ├── class_analysis_and_export
-        └── matrix_ops
+        ├── core/
+        ├── io_verify/
+        ├── mermaid_cli/
+        ├── tarjan_core/
+        ├── hasse_links/
+        ├── class_analysis_and_export/
+        ├── matrix_ops/
+        ├── stationary_analysis/
+        └── period_analysis/
 ```
 
 ---
@@ -140,12 +145,28 @@ cmake . && make
 
 ### Utilisation <a id="usage"></a>
 
-Exécuter le projet :
+Exécuter le projet (CLI couvrant toutes les parties) :
 
 **Avec [CMake](https://isocpp.org/):**
 
 ```
 ./markov-graph-analyzer
+```
+
+Options principales :
+
+```
+--in FILE            Graphe (format texte Partie 1)
+--eps E              Tolérance Markov et convergences (def 0.01)
+--out-graph FILE     Export Mermaid du graphe
+--out-hasse FILE     Export Mermaid du Hasse (classes)
+--keep-transitive    Ne pas retirer les liens transitifs du Hasse
+--matrix-power K     Affiche M^K
+--converge-max N     Iter max pour diff(M^n, M^{n-1}) < eps (def 30)
+--dist-start V       Sommet de départ pour une distribution
+--dist-steps T       Nombre d'étapes pour la distribution
+--no-stationary      Désactive le calcul des stationnaires par classe
+--period             Calcule la période de chaque classe (défi)
 ```
 
 ### Tests <a id="testing"></a>
