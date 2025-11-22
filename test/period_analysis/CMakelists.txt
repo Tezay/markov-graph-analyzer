@@ -5,8 +5,7 @@ add_executable(test_period
     ${PROJECT_SOURCE_DIR}/src/list.c
     ${PROJECT_SOURCE_DIR}/src/graph.c
     ${PROJECT_SOURCE_DIR}/src/scc.c           
-    ${PROJECT_SOURCE_DIR}/src/matrix.c       
-    ${PROJECT_SOURCE_DIR}/src/matrix_sub.c    
+    ${PROJECT_SOURCE_DIR}/src/matrix.c
     ${PROJECT_SOURCE_DIR}/src/period.c        
 )
 
