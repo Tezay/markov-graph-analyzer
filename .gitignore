@@ -76,8 +76,7 @@ Testing/
 *.exe
 
 # Sorties locales
-out/
-!.gitkeep
+out/*
 *.mmd
 *.log
 
