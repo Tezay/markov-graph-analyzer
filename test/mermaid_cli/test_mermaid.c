@@ -59,12 +59,12 @@ static int fread_edge(FILE *f, int *a, int *b, float *p) { return fscanf(f, "%d 
 void read_graph_from_file(const char *filename, AdjList *g) {
     FILE *file = fopen(filename, "rt");
     if (!file) {
-        perror("Could not open file for reading");
+        perror("Impossible d'ouvrir le fichier en lecture");
         exit(EXIT_FAILURE);
     }
     int nb;
     if (!fread_int(file, &nb)) {
-        perror("Could not read number of vertices");
+        perror("Impossible de lire le nombre de sommets");
         fclose(file);
         exit(EXIT_FAILURE);
     }
@@ -89,7 +89,7 @@ static int file_exists_nonempty(const char *path) {
 
 static void write_text_file(const char *path, const char *content) {
     if (ensure_dir("data") != 0) {
-        fprintf(stderr, "[ERR] ensure_dir(data) failed\n");
+        fprintf(stderr, "[ERR] ensure_dir(data) a échoué\n");
         exit(EXIT_FAILURE);
     }
     FILE *f = fopen(path, "wt");
@@ -181,15 +181,15 @@ static void test_export_mermaid_memory_graphs(void) {
     int e1 = export_mermaid(&g1, f1);
     int e2 = export_mermaid(&g2, f2);
 
-    printf("export_mermaid(valid) -> %d | fichier=%s | existe=%d\n", e1, f1, file_exists_nonempty(f1));
-    printf("export_mermaid(bad)   -> %d | fichier=%s | existe=%d\n", e2, f2, file_exists_nonempty(f2));
+    printf("export_mermaid(valide) -> %d | fichier=%s | existe=%d\n", e1, f1, file_exists_nonempty(f1));
+    printf("export_mermaid(invalide)   -> %d | fichier=%s | existe=%d\n", e2, f2, file_exists_nonempty(f2));
 
     graph_free(&g1);
     graph_free(&g2);
 }
 
 static void test_verify_markov(void) {
-    printf("\n[TEST] verify_markov\n");
+    printf("\n[TEST] verify_markov (vérification Markov)\n");
     AdjList g1, g2;
     make_sample_graph_valid(&g1);
     make_sample_graph_bad(&g2);
@@ -197,15 +197,15 @@ static void test_verify_markov(void) {
     int ok1 = verify_markov(&g1, 0.01f);
     int ok2 = verify_markov(&g2, 0.01f);
 
-    printf("verify_markov(valid) -> %d (attendu 1)\n", ok1);
-    printf("verify_markov(bad)   -> %d (attendu 0)\n", ok2);
+    printf("verify_markov(valide)   -> %d (attendu 1)\n", ok1);
+    printf("verify_markov(invalide) -> %d (attendu 0)\n", ok2);
 
     graph_free(&g1);
     graph_free(&g2);
 }
 
 static void test_read_graph_from_file_and_export(void) {
-    printf("\n[TEST] read_graph_from_file + export_mermaid\n");
+    printf("\n[TEST] lecture de fichier + export_mermaid\n");
 
     const char *path = "data/exemple1.txt";
     const char *content =
@@ -229,9 +229,9 @@ static void test_read_graph_from_file_and_export(void) {
     ensure_dir("out");
     int e = export_mermaid(&g, outf);
 
-    printf("export_mermaid(file) -> %d | fichier=%s | existe=%d\n", e, outf, file_exists_nonempty(outf));
+    printf("export_mermaid(fichier) -> %d | fichier=%s | existe=%d\n", e, outf, file_exists_nonempty(outf));
     int ok = verify_markov(&g, 0.01f);
-    printf("verify_markov(file) -> %d (attendu 1)\n", ok);
+    printf("verify_markov(fichier) -> %d (attendu 1)\n", ok);
 
     graph_free(&g);
 }
@@ -241,6 +241,7 @@ static void test_read_graph_from_file_and_export(void) {
 /* ─────────────────────────────────────────────────────────────────────────── */
 #ifndef TEST_NO_MAIN
 int main(void) {
+    printf("=== TEST Partie 1.3 : mermaid_cli (utils + export) ===\n");
 
     test_get_id_alpha();
     test_near_one();
@@ -249,7 +250,7 @@ int main(void) {
     test_verify_markov();
     test_read_graph_from_file_and_export();
 
-    printf("\nTous les tests ont été exécutés.\n");
+    printf("\n=== FIN TEST mermaid_cli ===\n");
     return 0;
 }
 #endif

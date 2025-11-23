@@ -167,7 +167,7 @@ static void test_absorbing_vertices(const Partition *P, const HasseLinkArray *L,
  * @see     build_test_partition(), build_test_links(), export_hasse_mermaid(), export_partition_text()
  */
 int main(void) {
-    printf("=== TEST Partie 2 : class analysis & export ===\n");
+    printf("=== TEST Partie 2.3 : class_analysis_and_export (types de classes / exports) ===\n");
 
     // 1) Construire la Partition et les Liens
     Partition P;
@@ -182,7 +182,7 @@ int main(void) {
     int *is_transient  = (int *)calloc(P.count, sizeof(int));
     int *is_persistent = (int *)calloc(P.count, sizeof(int));
     if (!is_transient || !is_persistent) {
-        fprintf(stderr, "[ERR] calloc failed for flags\n");
+        fprintf(stderr, "[ERR] calloc a échoué pour les indicateurs\n");
         scc_free_partition(&P);
         if (L.links) free(L.links);
         return 1;
@@ -200,7 +200,7 @@ int main(void) {
     //    On sait que 35 (classe 3, taille 1 et pas de sortie) est absorbant.
     //    3 ne l'est pas (sortie vers C0). 24 ne l'est pas (classe multi-éléments).
     const int sample_vertices[] = { 35, 3, 24, 7 };
-    printf("Absorbing check sur {35, 3, 24, 7} :\n");
+    printf("Vérification des états absorbants sur {35, 3, 24, 7} :\n");
     test_absorbing_vertices(&P, &L, sample_vertices, (int)(sizeof(sample_vertices)/sizeof(sample_vertices[0])));
 
     // 5) Tester les exports
@@ -217,9 +217,9 @@ int main(void) {
     }
 
     if (export_partition_text(&P, file_part) == 0) {
-        printf("[OK] Export Partition Text -> %s\n", file_part);
+        printf("[OK] Export partition (texte) -> %s\n", file_part);
     } else {
-        printf("[ERR] Export Partition Text a échoué\n");
+        printf("[ERR] Export partition (texte) a échoué\n");
     }
 
     // 6) Nettoyage
@@ -229,6 +229,6 @@ int main(void) {
     hasse_free_links(&L); // si ton hasse_free_links() fait free(L.links)
     // (sinon : if (L.links) free(L.links);)
 
-    printf("=== FIN TEST ===\n");
+    printf("=== FIN TEST class_analysis_and_export ===\n");
     return 0;
 }

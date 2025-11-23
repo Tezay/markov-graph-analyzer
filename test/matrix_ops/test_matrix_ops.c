@@ -157,7 +157,7 @@ int main(void)
 
     t_matrix M = mx_from_adjlist(&g);
 
-    printf("\n[Matrix] M (transition météo) :\n");
+    printf("\n[Matrice] M (transition météo) :\n");
     mx_print(&M);
 
     t_matrix M3 = mx_zeros(M.n);
@@ -166,10 +166,10 @@ int main(void)
     mx_power_int(&M, 3, &M3);
     mx_power_int(&M, 7, &M7);
 
-    printf("\n[Matrix] M^3 :\n");
+    printf("\n[Matrice] M^3 :\n");
     mx_print(&M3);
 
-    printf("\n[Matrix] M^7 :\n");
+    printf("\n[Matrice] M^7 :\n");
     mx_print(&M7);
 
     int n = M.n;
@@ -225,4 +225,3 @@ int main(void)
     printf("\n=== FIN TEST matrix-ops ===\n");
     return 0;
 }
-

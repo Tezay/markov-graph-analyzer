@@ -25,6 +25,7 @@ static int cmp_int(const void *a, const void *b) {
 }
 
 int main(void) {
+    printf("=== TEST Partie 2.1 : tarjan_core (SCC/partition) ===\n");
     AdjList g;
 
     const char *path = "data/exemple_valid_step3.txt";
@@ -48,6 +49,7 @@ int main(void) {
 
     scc_free_partition(&P);
     graph_free(&g);
-    printf("[OK] Tarjan partition script executed.\n");
+    printf("[OK] Partition Tarjan exécutée.\n");
+    printf("=== FIN TEST tarjan_core ===\n");
     return 0;
 }

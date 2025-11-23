@@ -32,6 +32,8 @@ static int count_edges(const AdjList *g) {
 }
 
 int main(void) {
+    printf("=== TEST Partie 1.2 : io_verify (lecture + Markov) ===\n");
+
     DIR *dir = opendir(DATA_DIR);
     if (!dir) {
         perror("opendir(DATA_DIR)");
@@ -57,14 +59,14 @@ int main(void) {
         read_graph_from_file(filepath, &g);
 
         int edges = count_edges(&g);
-        printf("  - nodes=%d edges=%d\n", g.size, edges);
+        printf("  - sommets=%d arêtes=%d\n", g.size, edges);
 
         int ok = verify_markov(&g, 0.01f);
         if (ok) {
-            printf("  => [OK] Markov verification passed.\n");
+            printf("  => [OK] Vérification Markov réussie.\n");
             ok_cnt++;
         } else {
-            printf("  => [KO] Markov verification failed.\n");
+            printf("  => [KO] Vérification Markov échouée.\n");
             ko_cnt++;
         }
 
@@ -72,7 +74,8 @@ int main(void) {
     }
     closedir(dir);
 
-    printf("\n[SUMMARY] files=%d ok=%d ko=%d\n", total, ok_cnt, ko_cnt);
+    printf("\n[RÉSUMÉ] fichiers=%d ok=%d ko=%d\n", total, ok_cnt, ko_cnt);
+    printf("=== FIN TEST io_verify ===\n");
     // Retourne le nombre de tests échoués
     return ko_cnt;
 }

@@ -42,7 +42,7 @@ Chaque sous-dossier possède son propre `CMakeLists.txt` qui déclare un exécut
   - lit avec `read_graph_from_file`
   - compte les arêtes
   - vérifie `verify_markov(g, 0.01)`
-- Résultat: affiche un récapitulatif `[SUMMARY] files=X ok=Y ko=Z` et retourne `Z` (nb d’échecs de vérification).
+- Résultat: affiche un récapitulatif `[RÉSUMÉ] fichiers=X ok=Y ko=Z` et retourne `Z` (nb d’échecs de vérification).
 
 ### mermaid_cli (`test/mermaid_cli/test_mermaid.c`)
 - But: tester des utilitaires (`get_id_alpha`, `near_one`, `ensure_dir`) et l’export Mermaid.
@@ -56,7 +56,7 @@ Chaque sous-dossier possède son propre `CMakeLists.txt` qui déclare un exécut
 ### tarjan_core (`test/tarjan_core/test_tarjan_core.c`)
 - But: valider l’algorithme de Tarjan et la construction de la partition en CFC.
 - Démarche: lit `data/exemple_valid_step3.txt`, exécute `tarjan_partition`, affiche les classes et construit un mapping sommet→classe pour vérification simple.
-- Résultat: affichage d’une partition plausible, fin de programme avec `[OK] Tarjan partition script executed.`
+- Résultat: affichage d’une partition plausible, fin de programme avec `[OK] Partition Tarjan exécutée.`
 
 ### hasse_links (`test/hasse_links/test_hasse_links.c`)
 - But: construire et afficher les liens inter-classes (Hasse) à partir d’un graphe et de sa partition en CFC.

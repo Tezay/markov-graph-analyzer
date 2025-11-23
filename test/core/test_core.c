@@ -1,9 +1,11 @@
+#include <stdio.h>
 #include "graph.h" // Inclut les définitions de AdjList, graph_init, graph_add_edge, graph_print et graph_free.
 
 /**
- * @brief Programme de démonstration pour l'utilisation des fonctions de gestion de graphe.
+ * @brief Programme de démonstration (Partie 1 - Etape 1) pour l'utilisation des fonctions de gestion de graphe.
  */
 int main(void) {
+    printf("=== TEST Partie 1.1 : core (graph/list) ===\n");
     AdjList g;
     // 1. Initialisation du graphe pour 4 sommets (états). Les sommets seront numérotés 1 à 4.
     graph_init(&g, 4);
@@ -26,5 +28,6 @@ int main(void) {
 
     // 4. Libération de la mémoire allouée par le graphe.
     graph_free(&g);
+    printf("=== FIN TEST core ===\n");
     return 0;
 }

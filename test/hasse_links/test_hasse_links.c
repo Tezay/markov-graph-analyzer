@@ -11,7 +11,7 @@
  * @param p Pointeur vers la structure Partition.
  */
 static void print_partition(const Partition *p) {
-    printf("=== Partition (SCCs) ===\n");
+    printf("=== Partition (CFC) ===\n");
     // Itère sur chaque classe
     for (int i = 0; i < p->count; i++) {
         printf("Classe %d: ", i);
@@ -42,6 +42,7 @@ static void print_links(const HasseLinkArray *arr) {
  * et la construction du graphe de Hasse.
  */
 int main(void) {
+    printf("=== TEST Partie 2.2 : hasse_links (liens inter-classes) ===\n");
     AdjList g;
     graph_init(&g, 6); // Initialise un graphe avec 6 sommets
 
@@ -78,6 +79,6 @@ int main(void) {
     hasse_free_links(&links); // Libère les liens de Hasse
     scc_free_partition(&p);   // Libère la partition des SCCs
     graph_free(&g);           // Libère le graphe d'adjacence
-
+    printf("=== FIN TEST hasse_links ===\n");
     return 0;
 }
