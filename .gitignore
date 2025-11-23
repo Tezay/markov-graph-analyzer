@@ -77,7 +77,7 @@ Testing/
 
 # Sorties locales
 out/
-!/out/.gitkeep
+!.gitkeep
 *.mmd
 *.log
 
