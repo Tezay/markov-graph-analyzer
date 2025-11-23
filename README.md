@@ -174,7 +174,7 @@ Options principales :
 
 ### Interface web <a id="web-ui"></a>
 
-**Guide de la partie web : [webui/README.md](test/README.md)**
+**Guide de la partie web : [webui/README.md](webui/README.md)**
 
 - Emplacement : `webui/` (Flask + Tailwind CDN).
 - Modes de saisie : fichier `--in`, texte brut, ou éditeur de graphe (génère un fichier temporaire en arrière-plan).
