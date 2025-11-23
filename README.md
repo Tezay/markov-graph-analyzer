@@ -31,7 +31,8 @@
     - **[Prérequis](#prerequisites)**
     - **[Installation](#installation)**
     - **[Utilisation](#usage)**
-    - **[Tests](#testing)**
+- **[Interface web](#web-ui)**
+- **[Tests unitaires](#testing)**
 
 ---
 
@@ -45,6 +46,7 @@ Ensemble d’outils pour analyser, valider et visualiser des graphes et chaînes
 - **📈 Diagramme de Hasse (Partie 2) :** liens inter-classes avec option de suppression des redondances.
 - **📊 Propriétés Markov (Partie 2) :** classes transitoires/persistantes, états absorbants, irréductibilité.
 - **🧠 Matrices & distributions (Partie 3) :** puissances de matrices, convergence, distributions stationnaires par classe, périodicité (défi).
+- **🌐 Web UI bonus (indépendante & facultative) :** petite interface web pour saisir les arguments, générer un graphe (fichier, texte ou éditeur visuel) et lancer le binaire C.
 
 ---
 
@@ -68,6 +70,7 @@ Ensemble d’outils pour analyser, valider et visualiser des graphes et chaînes
     ├── README.md
     ├── data/
     ├── out/
+    ├── webui/
     ├── include
     │   ├── graph.h
     │   ├── io.h
@@ -169,6 +172,24 @@ Options principales :
 --period             Calcule la période de chaque classe (défi)
 ```
 
-### Tests <a id="testing"></a>
+### Interface web <a id="web-ui"></a>
+
+- Emplacement : `webui/` (Flask + Tailwind CDN).
+- Modes de saisie : fichier `--in`, texte brut, ou éditeur de graphe (génère un fichier temporaire en arrière-plan).
+- Lancement rapide :
+  ```bash
+  python3 -m venv .venv
+  . .venv/bin/activate # Sur Windows : .venv\Scripts\activate
+  pip install flask
+  FLASK_APP=webui/app.py flask run
+  ```
+  puis ouvrez `http://127.0.0.1:5000`. Le binaire C doit être construit et accessible (ex: `./markov_graph_analyzer` ou `./cmake-build-debug/markov_graph_analyzer`).
+
+#### Capture d’écran
+  ![Web UI](assets/screens/webui.png)
+
+**Note :** Une partie de l'UI (Tailwind) et du Javascript de l'inteface web a été réalisée avec l'assistance d'IAs génératives, n'étant pas le cœur du projet (optionnel).
+
+### Tests unitaires <a id="testing"></a>
 
 - **Guide des tests : [test/README.md](test/README.md)**

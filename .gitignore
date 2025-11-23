@@ -84,10 +84,17 @@ out/
 .DS_Store
 Thumbs.db
 
-# Scripts perso / environnements (optionnel)
-scripts/*.local.sh
-
 #vscode
 .cache
 build
 .vscode
+
+# Python (partie web optionnelle)
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+env/
+venv/
+ENV/
+.venv/
