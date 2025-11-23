@@ -50,8 +50,6 @@ SccClass scc_make_empty_class(void) {
  * @param[in,out] c  Pointeur vers la classe à enrichir
  * @param[in]     v  Identifiant du sommet (1..N)
  *
- * @return  void
- *
  * @pre  `c` non NULL
  */
 void scc_add_vertex(SccClass *c, int v) {
@@ -72,8 +70,6 @@ void scc_add_vertex(SccClass *c, int v) {
  *
  * @param[out] p  Partition à initialiser
  *
- * @return  void
- *
  * @pre  `p` non NULL
  * @post `p->classes == NULL`, `p->count == 0`, `p->capacity == 0`
  */
@@ -92,8 +88,6 @@ void scc_init_partition(Partition *p) {
  *
  * @param[in,out] p  Partition cible
  * @param[in]     c  Classe à ajouter (copie superficielle)
- *
- * @return  void
  *
  * @pre  `p` non NULL
  * @note La propriété de `c.verts` est transférée à la partition; ne pas le libérer ensuite hors de la partition.
@@ -115,8 +109,6 @@ void scc_add_class(Partition *p, SccClass c) {
  * classes lui‑même, et remet la structure à zéro.
  *
  * @param[in,out] p  Partition à libérer et remettre à zéro
- *
- * @return  void
  *
  * @pre  `p` non NULL
  * @post `p->classes == NULL`, `p->count == 0`, `p->capacity == 0`

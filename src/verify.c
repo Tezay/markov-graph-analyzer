@@ -6,6 +6,14 @@ static int in_range(float x, float a, float b) {
     return x >= a && x <= b;
 }
 
+/**
+ * @brief Vérifie si un graphe est un graphe de Markov valide
+ *
+ * @param  g   Pointeur vers le graphe à vérifier
+ * @param  eps Tolérance pour la somme des probabilités sortantes
+ *
+ * @return int  1 si le graphe est valide, sinon 0
+ */
 int verify_markov(const AdjList *g, float eps) {
     if (!g || g->size <= 0 || !g->array) {
         fprintf(stderr, "[Markov][ERR] Graphe invalide (structure non initialisée).\n");

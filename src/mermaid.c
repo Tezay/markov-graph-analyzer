@@ -85,7 +85,7 @@ int export_mermaid(const AdjList *g, const char *outfile) {
         from_id[sizeof(from_id) - 1] = '\0';
 
         for (Cell *c = g->array[from - 1].head; c; c = c->next) { // Parcourt la liste des voisins
-            int to = c->dest;                           // Nœud de destination
+            int to = c->dest; // Nœud de destination
             // Copier l'identifiant destination dans un buffer local
             char to_id[16];
             strncpy(to_id, get_id_alpha(to), sizeof(to_id));

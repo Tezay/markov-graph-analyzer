@@ -6,7 +6,8 @@
 
 /**
  * @brief Initialise la structure HasseLinkArray à vide.
- * * @param arr Pointeur vers le tableau de liens de Hasse (HasseLinkArray).
+ *
+ * @param arr Pointeur vers le tableau de liens de Hasse (HasseLinkArray).
  */
 void hasse_init_links(HasseLinkArray *arr){
     arr->links = NULL;
@@ -16,7 +17,8 @@ void hasse_init_links(HasseLinkArray *arr){
 
 /**
  * @brief Libère la mémoire allouée pour le tableau de liens de Hasse.
- * * @param arr Pointeur vers le tableau à libérer.
+ *
+ * @param arr Pointeur vers le tableau à libérer.
  */
 void hasse_free_links(HasseLinkArray *arr){
     free(arr->links);
@@ -26,9 +28,11 @@ void hasse_free_links(HasseLinkArray *arr){
 
 /**
  * @brief Vérifie si un lien direct entre deux classes existe déjà.
- * * @param arr Pointeur vers le tableau de liens existants.
+ *
+ * param arr Pointeur vers le tableau de liens existants.
  * @param c_from Classe de départ (indices 1-basés)
  * @param c_to Classe d'arrivée (indices 1-basés)
+ *
  * @return int 1 si le lien existe, 0 sinon.
  */
 int hasse_link_exists(const HasseLinkArray *arr, int c_from, int c_to){
@@ -43,12 +47,11 @@ int hasse_link_exists(const HasseLinkArray *arr, int c_from, int c_to){
 }
 
 /**
- * @brief Construit une table de correspondance pour trouver rapidement la classe
- * d'appartenance de n'importe quel sommet.
- * * @param p Partition contenant les classes de composantes fortement connexes (SCC).
+ * @brief Construit une table de correspondance pour trouver rapidement la classe d'appartenance de n'importe quel sommet.
+ *
+ * @param p Partition contenant les classes de composantes fortement connexes (SCC).
  * @param n_vertices Nombre total de sommets dans le graphe original.
- * @param class_of_vertex Tableau de sortie (taille n_vertices + 1) où l'indice est le sommet
- * et la valeur est l'indice de sa classe (0-basé).
+ * @param class_of_vertex Tableau de sortie (taille n_vertices + 1) où l'indice est le sommet et la valeur est l'indice de sa classe (à partir de 0).
  */
 void build_vertex_to_class_map(Partition *p, int n_vertices, int *class_of_vertex){
     if (!p || !class_of_vertex) return;
@@ -74,9 +77,9 @@ void build_vertex_to_class_map(Partition *p, int n_vertices, int *class_of_verte
 }
 
 /**
- * @brief Détecte les liens directs entre les différentes classes d'équivalence
- * (Composantes Fortement Connexes) à partir du graphe original.
- * * @param g Pointeur vers le graphe d'adjacence original.
+ * @brief Détecte les liens directs entre les différentes classes d'équivalence CFC à partir du graphe original.
+ *
+ * @param g Pointeur vers le graphe d'adjacence original.
  * @param p Pointeur vers la partition des classes (SCC).
  * @param out_links Pointeur vers le tableau de liens de Hasse à construire (croissance dynamique).
  */
@@ -117,9 +120,9 @@ void build_class_links(const AdjList *g, const Partition *p, HasseLinkArray *out
 
 
 /**
- * @brief Supprime les liens redondants pour obtenir le diagramme de Hasse
- * (les liens transitifs : A->C si A->B et B->C existent).
- * * @param links Pointeur vers le tableau de liens entre classes à modifier.
+ * @brief Supprime les liens redondants pour obtenir le diagramme de Hasse (les liens transitifs : A->C si A->B et B->C existent).
+ *
+ * @param links Pointeur vers le tableau de liens entre classes à modifier.
  * @param nb_classes Nombre total de classes.
  */
 void remove_transitive_links(HasseLinkArray *links, int nb_classes){
@@ -135,11 +138,11 @@ void remove_transitive_links(HasseLinkArray *links, int nb_classes){
     }
 
     // 3. Calcul de la fermeture transitive (Algorithme de Floyd-Warshall)
-    // Après cette étape, reach[i][j] = 1 si la classe i peut atteindre la classe j (directement ou via des intermédiaires).
+    // Après cette étape, reach[i][j] = 1 si la classe i peut atteindre la classe j
     for (int k = 0; k < nb_classes; k++) { // Classe intermédiaire
         for (int i = 0; i < nb_classes; i++) { // Classe de départ
             for (int j = 0; j < nb_classes; j++) { // Classe d'arrivée
-                // Si i peut atteindre k, et k peut atteindre j, alors i peut atteindre j.
+                // Si i peut atteindre k, et k peut atteindre j, alors i peut atteindre j
                 if (reach[i][k] && reach[k][j]) reach[i][j] = 1;
             }
         }

@@ -17,9 +17,6 @@
  * pour rester cohérent avec le style de la Partie 1.
  *
  * @param[in]  f  Fichier déjà ouvert en écriture
- *
- * @return  void
- *
  */
 static void write_mermaid_header_hasse(FILE *f) {
     fputs("---\n", f);
@@ -39,8 +36,6 @@ static void write_mermaid_header_hasse(FILE *f) {
  * @param[in]  f          Fichier déjà ouvert en écriture
  * @param[in]  class_idx  Index k de la classe (0..p->count-1)
  * @param[in]  cls        Pointeur vers la classe (SccClass)
- *
- * @return  void
  */
 static void write_class_label(FILE *f, int class_idx, const SccClass *cls) {
     int cid = class_idx + 1; // affichage à partir de 1
@@ -70,9 +65,6 @@ static void write_class_label(FILE *f, int class_idx, const SccClass *cls) {
  *
  * @param[in]  f      Fichier déjà ouvert en écriture
  * @param[in]  links  Tableau des liens entre classes (HasseLinkArray)
- *
- * @return  void
- *
  */
 static void write_links(FILE *f, const HasseLinkArray *links) {
     if (!links || links->count <= 0) return;

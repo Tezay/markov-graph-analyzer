@@ -13,23 +13,26 @@
  * @return  Une structure `t_matrix` initialisée.
  *          Si `n <= 0`, la matrice retournée a `n = 0` et `a = NULL`.
  */
-t_matrix mx_zeros(int n)
-{
+t_matrix mx_zeros(int n) {
+    // Initialisation de la structure résultat
     t_matrix matrix;
     matrix.n = n;
     matrix.a = NULL;
 
+    // Vérif taille n valide
     if (n <= 0) {
         matrix.n = 0;
         return matrix;
     }
 
+    // Allocation des pointeurs de lignes
     float **rows = (float **)malloc((size_t)n * sizeof(float *));
     if (!rows) {
         perror("malloc");
         exit(EXIT_FAILURE);
     }
 
+    // Allocation du bloc de données (n*n floats initialisés à 0)
     float *data = (float *)calloc((size_t)n * (size_t)n, sizeof(float));
     if (!data) {
         perror("calloc");
@@ -37,10 +40,12 @@ t_matrix mx_zeros(int n)
         exit(EXIT_FAILURE);
     }
 
+    // Initialisation des pointeurs de lignes
     for (int row = 0; row < n; ++row) {
         rows[row] = data + (size_t)row * (size_t)n;
     }
 
+    // Affectation à la structure résultat
     matrix.a = rows;
     return matrix;
 }
@@ -50,8 +55,7 @@ t_matrix mx_zeros(int n)
  *
  * @param[in,out] M  Matrice à libérer (peut être NULL ou vide)
  */
-void mx_free(t_matrix *M)
-{
+void mx_free(t_matrix *M) {
     if (!M || !M->a) {
         return;
     }
@@ -71,8 +75,7 @@ void mx_free(t_matrix *M)
  * @param[in]  src  Matrice source à copier
  * @param[out] dst  Matrice destination (peut être non initialisée)
  */
-void mx_copy(const t_matrix *src, t_matrix *dst)
-{
+void mx_copy(const t_matrix *src, t_matrix *dst) {
     if (!src || !dst) {
         return;
     }
@@ -89,6 +92,7 @@ void mx_copy(const t_matrix *src, t_matrix *dst)
         *dst = mx_zeros(size);
     }
 
+    // Copie des données
     for (int row = 0; row < size; ++row) {
         for (int col = 0; col < size; ++col) {
             dst->a[row][col] = src->a[row][col];
@@ -106,8 +110,7 @@ void mx_copy(const t_matrix *src, t_matrix *dst)
  *
  * @return  Matrice de transition correspondante
  */
-t_matrix mx_from_adjlist(const AdjList *g)
-{
+t_matrix mx_from_adjlist(const AdjList *g) {
     if (!g || g->size <= 0 || !g->array) {
         fprintf(stderr, "[matrix][ERR] Graphe invalide dans mx_from_adjlist\n");
         exit(EXIT_FAILURE);
@@ -116,6 +119,7 @@ t_matrix mx_from_adjlist(const AdjList *g)
     int size = g->size;
     t_matrix matrix = mx_zeros(size);
 
+    // Remplissage de la matrice à partir de la liste d'adjacence
     for (int vertexIndex = 0; vertexIndex < size; ++vertexIndex) {
         List *adjacentList = &g->array[vertexIndex];
         for (Cell *cell = adjacentList->head; cell != NULL; cell = cell->next) {
@@ -143,8 +147,7 @@ t_matrix mx_from_adjlist(const AdjList *g)
  * @param[in]  B  Deuxième matrice (à droite)
  * @param[out] C  Résultat de la multiplication
  */
-void mx_mul(const t_matrix *A, const t_matrix *B, t_matrix *C)
-{
+void mx_mul(const t_matrix *A, const t_matrix *B, t_matrix *C) {
     if (!A || !B || !C || !A->a || !B->a || A->n != B->n) {
         fprintf(stderr, "[matrix][ERR] Matrices invalides ou tailles incompatibles dans mx_mul\n");
         exit(EXIT_FAILURE);
@@ -157,6 +160,7 @@ void mx_mul(const t_matrix *A, const t_matrix *B, t_matrix *C)
         *C = mx_zeros(size);
     }
 
+    //
     for (int row = 0; row < size; ++row) {
         for (int col = 0; col < size; ++col) {
             float sum = 0.0f;
@@ -176,8 +180,7 @@ void mx_mul(const t_matrix *A, const t_matrix *B, t_matrix *C)
  *
  * @return  Somme des valeurs absolues des différences
  */
-float mx_diff_abs1(const t_matrix *M, const t_matrix *N)
-{
+float mx_diff_abs1(const t_matrix *M, const t_matrix *N) {
     if (!M || !N || !M->a || !N->a || M->n != N->n) {
         fprintf(stderr, "[matrix][ERR] Matrices invalides ou tailles incompatibles dans mx_diff_abs1\n");
         exit(EXIT_FAILURE);
@@ -205,8 +208,7 @@ float mx_diff_abs1(const t_matrix *M, const t_matrix *N)
  * @param[in]  M    Matrice de transition n×n (lignes = états de départ)
  * @param[out] pi1  Distribution résultante (taille n)
  */
-void dist_step(const float *pi0, const t_matrix *M, float *pi1)
-{
+void dist_step(const float *pi0, const t_matrix *M, float *pi1) {
     if (!M || !M->a || M->n <= 0 || !pi0 || !pi1) {
         fprintf(stderr, "[matrix][ERR] Paramètres invalides dans dist_step\n");
         exit(EXIT_FAILURE);
@@ -214,6 +216,7 @@ void dist_step(const float *pi0, const t_matrix *M, float *pi1)
 
     int size = M->n;
 
+    // Calcul de pi1 = pi0 * M
     for (int col = 0; col < size; ++col) {
         float sum = 0.0f;
         for (int row = 0; row < size; ++row) {
@@ -234,8 +237,7 @@ void dist_step(const float *pi0, const t_matrix *M, float *pi1)
  * @param[in]  t    Nombre d'étapes (t ≥ 0)
  * @param[out] pit  Distribution après t étapes (taille n)
  */
-void dist_power(const float *pi0, const t_matrix *M, int t, float *pit)
-{
+void dist_power(const float *pi0, const t_matrix *M, int t, float *pit) {
     if (!M || !M->a || M->n <= 0 || !pi0 || !pit || t < 0) {
         fprintf(stderr, "[matrix][ERR] Paramètres invalides dans dist_power\n");
         exit(EXIT_FAILURE);
@@ -243,7 +245,7 @@ void dist_power(const float *pi0, const t_matrix *M, int t, float *pit)
 
     int size = M->n;
 
-    /* Cas trivial : t == 0 => copie directe */
+    // Cas trivial : t == 0 => copie directe
     if (t == 0) {
         for (int index = 0; index < size; ++index) {
             pit[index] = pi0[index];
@@ -251,6 +253,7 @@ void dist_power(const float *pi0, const t_matrix *M, int t, float *pit)
         return;
     }
 
+    // Allocation de deux vecteurs temporaires pour les étapes
     float *current = (float *)malloc((size_t)size * sizeof(float));
     float *next = (float *)malloc((size_t)size * sizeof(float));
     if (!current || !next) {
@@ -260,10 +263,12 @@ void dist_power(const float *pi0, const t_matrix *M, int t, float *pit)
         exit(EXIT_FAILURE);
     }
 
+    // Init distribution courante
     for (int index = 0; index < size; ++index) {
         current[index] = pi0[index];
     }
 
+    // Itérations successives pour t étapes
     for (int step = 0; step < t; ++step) {
         dist_step(current, M, next);
 
@@ -272,6 +277,7 @@ void dist_power(const float *pi0, const t_matrix *M, int t, float *pit)
         next = tmp;
     }
 
+    // Copie du résultat final dans pit
     for (int index = 0; index < size; ++index) {
         pit[index] = current[index];
     }
@@ -288,14 +294,14 @@ void dist_power(const float *pi0, const t_matrix *M, int t, float *pit)
  *
  * @param[in] M  Matrice à afficher
  */
-void mx_print(const t_matrix *M)
-{
+void mx_print(const t_matrix *M) {
     if (!M || !M->a || M->n <= 0) {
         printf("[empty matrix]\n");
         return;
     }
 
     int size = M->n;
+    // Affichage ligne par ligne
     for (int row = 0; row < size; ++row) {
         for (int col = 0; col < size; ++col) {
             printf("%8.4f", (double)M->a[row][col]);
@@ -317,8 +323,7 @@ void mx_print(const t_matrix *M)
  *                    Si compo_index est invalide ou la classe est vide :
  *                    retourne une matrice de taille 0 (n = 0, a = NULL).
  */
-t_matrix subMatrix(t_matrix matrix, Partition part, int compo_index)
-{
+t_matrix subMatrix(t_matrix matrix, Partition part, int compo_index) {
     t_matrix sub;
     sub.n = 0;
     sub.a = NULL;
@@ -374,8 +379,7 @@ t_matrix subMatrix(t_matrix matrix, Partition part, int compo_index)
  *
  * @return 1 si convergence atteinte, 0 sinon, -1 en cas d'erreur
  */
-int mx_power_until_diff(const t_matrix *M, float eps, int max_iter, t_matrix *out, int *iters_done)
-{
+int mx_power_until_diff(const t_matrix *M, float eps, int max_iter, t_matrix *out, int *iters_done) {
     if (!M || !M->a || M->n <= 0 || !out || max_iter <= 0) {
         return -1;
     }
@@ -428,8 +432,7 @@ static float dist_l1(const float *a, const float *b, int n) {
  *
  * @return 1 si convergence atteinte, 0 sinon
  */
-int stationary_distribution(const t_matrix *MC, float eps, int max_iter, float *pi_out)
-{
+int stationary_distribution(const t_matrix *MC, float eps, int max_iter, float *pi_out) {
     if (!MC || !MC->a || MC->n <= 0 || !pi_out || max_iter <= 0) {
         return 0;
     }

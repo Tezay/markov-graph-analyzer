@@ -72,9 +72,6 @@ static int class_has_outgoing_link(const HasseLinkArray *links, int class_idx) {
  * @param[in]   nb_classes     Nombre total de classes
  * @param[out]  is_transient   Tableau (taille nb_classes) rempli à 1 si transitoire, 0 sinon (si non NULL)
  * @param[out]  is_persistent  Tableau (taille nb_classes) rempli à 1 si persistante, 0 sinon (si non NULL)
- *
- * @return  void
- *
  */
 void markov_class_types(const HasseLinkArray *links, int nb_classes,
                         int *is_transient, int *is_persistent)
@@ -137,7 +134,6 @@ int markov_is_irreducible(const Partition *part) {
  * @param[in]  vertex Sommet à tester
  *
  * @return  1 si `vertex` est absorbant, sinon 0
- *
  */
 int markov_is_absorbing_vertex(const Partition *part, const HasseLinkArray *links, int vertex) {
   //Vérification si la partition existe bien
