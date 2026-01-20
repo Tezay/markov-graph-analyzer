@@ -12,7 +12,7 @@
 
 <img src="assets/badges/school-efrei.svg" alt="School: EFREI Paris">
 <img src="assets/badges/cohort-p2.svg" alt="Cohort: Prépa P2 2025–2026">
-<img src="assets/badges/license-private.svg" alt="License: Private">
+<img src="https://img.shields.io/github/license/Tezay/markov-graph-analyzer?style=flat" alt="License: MIT">
 
 <img src="https://img.shields.io/badge/CMake-064F8C.svg?style=flat&logo=CMake&logoColor=white" alt="CMake">
 <img src="https://img.shields.io/badge/C-A8B9CC.svg?style=flat&logo=C&logoColor=black" alt="C">
